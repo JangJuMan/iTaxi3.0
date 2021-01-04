@@ -84,6 +84,130 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin{
 
 
 
+
+
+
+
+  // 채팅방 정보 위젯 ========================================================================================================================
+  Widget _chatRoomInfo(){
+    return Container(
+      child: Column(
+        children: [
+          _roomInfo(),
+          _participantInfo(),
+        ],
+      ),
+    );
+  }
+
+  // 방정보
+  Widget _roomInfo(){
+    return Container(
+      // 디버깅용
+        decoration: BoxDecoration(
+          // border: Border.all(width: 1.0, color: Color(0xFF3FA9F5)),
+          color: Color.fromRGBO(0xF5, 0xF5, 0xF5, 1),
+          // color: Color.fromRGBO(0x3F, 0xA9, 0xF5, 0.5),
+        ),
+
+        margin: EdgeInsets.all(0.0),
+        padding: EdgeInsets.symmetric(vertical: 7.0, horizontal: 7.0),
+        child: Row(
+          children: [
+            Flexible(
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(2.0),
+                    margin: EdgeInsets.all(2.0),
+                    decoration: BoxDecoration(
+                      // border: Border.all(color: Colors.redAccent)
+                    ),
+                    child: Row(
+                      children: [
+                        Text(" 시외버스터미널", style: Theme.of(context).textTheme.headline6),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(2.0),
+                    margin: EdgeInsets.all(2.0),
+                    decoration: BoxDecoration(
+                      // border: Border.all(color: Colors.redAccent)
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.play_arrow, size: 20),
+                        Text("  한동대학교", style: Theme.of(context).textTheme.headline6),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(2.0),
+                    margin: EdgeInsets.all(2.0),
+                    decoration: BoxDecoration(
+                      // border: Border.all(color: Colors.redAccent)
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.departure_board, size: 20),
+                        Text(" 2020년 01월 23일  17:20", style: TextStyle(fontSize: 20)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                // border: Border.all(color: Colors.redAccent)
+              ),
+              child: Column(
+                children: [
+                  Theme.of(context).platform == TargetPlatform.iOS
+                      ? CupertinoButton(
+                    child: Text(
+                      '방 나가기',
+                      style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.w600),
+                    ),
+                    onPressed: () => {},
+                  )
+                      : RaisedButton(
+                    child: Text('방 나가기'),
+                    onPressed: () => {},
+                  ),
+                  // TODO: 방장한테만 보이기, (상관없나?)
+                  // TODO: 버튼 스타일 보여주려고 지금은 != 로 해놓음. 나중에 바꿔야함.
+                  Theme.of(context).platform != TargetPlatform.iOS
+                      ? CupertinoButton(
+                    child: Text('정산하기'),
+                    onPressed: () => {},
+                  )
+                      : RaisedButton(
+                    child: Text('정산하기'),
+                    onPressed: () => {},
+                  ),
+                ],
+              ),
+            ),
+          ],
+        )
+    );
+  }
+
+  Widget _participantInfo(){
+    return Container(
+      child: Row(
+        children: [
+          Text("참여자 정보"),
+        ],
+      ),
+    );
+  }
+
+  //========================================================================================================================
+
   // 텍스트 입력 위젯
   Widget _buildTextComposer(){
     return Container(
@@ -107,7 +231,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin{
                 margin: EdgeInsets.symmetric(horizontal: 4.0),
                 child: Theme.of(context).platform == TargetPlatform.iOS
                     ? CupertinoButton(
-                  child: Text('Send'),
+                  child: Text('보내기'),
                   onPressed: _isComposing ? () => _handleSubmitted(_textController.text) : null,
                 )
                     : IconButton(
@@ -127,13 +251,18 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text ('ITaxi ChatRoom'),
+        title: Text ('채팅방 제목'),
         // appbar 의 z좌표. 4.0: 그림자 O, 0.0: 그림자 X
         elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
       ),
       body: Container(
           child: Column(
             children: [
+              // 채팅방 정보
+              Container(
+                child: _chatRoomInfo(),
+              ),
+              // 채팅기록
               Flexible(
                 child: ListView.builder(
                   padding: EdgeInsets.all(8.0),
@@ -142,7 +271,9 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin{
                   itemCount: _messages.length,
                 ),
               ),
+              // 디바이더
               Divider(height: 1.0),
+              // 채팅 입력창
               Container(
                 decoration: BoxDecoration(
                     color: Theme.of(context).cardColor),
@@ -152,10 +283,10 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin{
           ),
           decoration: Theme.of(context).platform == TargetPlatform.iOS
               ? BoxDecoration(
-            border: Border(
-              top: BorderSide(color: Colors.grey[200]),
-            ),
-          )
+                  border: Border(
+                  top: BorderSide(color: Colors.grey[200]),
+                ),
+              )
               : null
       ),
     );
