@@ -3,9 +3,14 @@ import 'package:flutter/foundation.dart'; // 테마
 
 // IOS 테마
 final ThemeData kIOSTheme = ThemeData(
-  // 오렌지 엑센트가 있는 밝은 회색
-  primarySwatch: Colors.orange,
-  primaryColor: Colors.grey[100],
+  // [1]: 오렌지 엑센트가 있는 밝은 회색
+  // primarySwatch: Colors.orange,
+  // primaryColor: Colors.grey[100],
+  // primaryColorBrightness: Brightness.light,
+
+  // [2]:
+  primarySwatch: Colors.blue,
+  primaryColor: Colors.blueAccent[100],
   primaryColorBrightness: Brightness.light,
 );
 
