@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/screen/plus.dart';
+import 'package:my_app/screen/pluspage.dart';
 import 'package:flutter/cupertino.dart';
 
 class TaxiCarList extends StatefulWidget {
@@ -41,6 +41,7 @@ class ArriveMenu extends StatefulWidget {
   @override
   _ArriveMenuState createState() => _ArriveMenuState();
 }
+
 class CalendarSection extends StatefulWidget {
   CalendarSection({Key key, this.title}) : super(key: key);
   final String title;
@@ -48,7 +49,6 @@ class CalendarSection extends StatefulWidget {
   @override
   _CalendarState createState() => _CalendarState();
 }
-
 
 //Leave dropdown menu
 class _LeaveMenuState extends State<LeaveMenu> {
@@ -99,7 +99,7 @@ class _ArriveMenuState extends State<ArriveMenu> {
           dropdownValue = newValue;
         });
       },
-      items: <String>['한동대', '커피유야', '다이소', '세차장', '포항역','직접입력']
+      items: <String>['한동대', '커피유야', '다이소', '세차장', '포항역', '직접입력']
           .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
@@ -136,8 +136,11 @@ Row leaveArrive() {
       ),
       Column(
         children: <Widget>[
-          Icon(Icons.youtube_searched_for, color: Colors.blueAccent,),
-  ],
+          Icon(
+            Icons.youtube_searched_for,
+            color: Colors.blueAccent,
+          ),
+        ],
       ),
     ],
   );
@@ -154,20 +157,32 @@ class _CalendarState extends State<CalendarSection> {
       children: <Widget>[
         Column(
           children: <Widget>[
-           Icon(Icons.arrow_back_ios, color: Colors.black26, size: 20,),
+            Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black26,
+              size: 20,
+            ),
           ],
         ),
         Column(
           children: <Widget>[
             Row(
               children: <Widget>[
-                Text(_dateTime == null ? DateTime.now().month.toString(): _dateTime.month.toString(), style: TextStyle(color: Colors.blueAccent, fontSize: 18)),
+                Text(
+                    _dateTime == null
+                        ? DateTime.now().month.toString()
+                        : _dateTime.month.toString(),
+                    style: TextStyle(color: Colors.blueAccent, fontSize: 18)),
                 Text('월'),
               ],
             ),
             Row(
               children: <Widget>[
-                Text(_dateTime == null? DateTime.now().day.toString(): _dateTime.day.toString(), style: TextStyle(color: Colors.blueAccent, fontSize: 18)),
+                Text(
+                    _dateTime == null
+                        ? DateTime.now().day.toString()
+                        : _dateTime.day.toString(),
+                    style: TextStyle(color: Colors.blueAccent, fontSize: 18)),
                 Text('일'),
               ],
             ),
@@ -177,7 +192,11 @@ class _CalendarState extends State<CalendarSection> {
         ),
         Column(
           children: <Widget>[
-            Icon(Icons.arrow_forward_ios, color: Colors.black26, size: 20,),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.black26,
+              size: 20,
+            ),
           ],
         ),
         Column(
@@ -186,11 +205,12 @@ class _CalendarState extends State<CalendarSection> {
               icon: Icon(Icons.calendar_today, color: Colors.blueAccent),
               onPressed: () {
                 showDatePicker(
-                  context: context,
-                  initialDate: _dateTime == null ? DateTime.now() : _dateTime,
-                  firstDate: DateTime(DateTime.now().year-5),
-                  lastDate: DateTime(DateTime.now().year+5)
-                ).then((date) {
+                        context: context,
+                        initialDate:
+                            _dateTime == null ? DateTime.now() : _dateTime,
+                        firstDate: DateTime(DateTime.now().year - 5),
+                        lastDate: DateTime(DateTime.now().year + 5))
+                    .then((date) {
                   setState(() {
                     _dateTime = date;
                   });
@@ -198,13 +218,11 @@ class _CalendarState extends State<CalendarSection> {
               },
             ),
           ],
-
         ),
       ],
     );
   }
 }
-
 
 //taxi all
 class _TaxiListState extends State<TaxiList> {
@@ -308,26 +326,27 @@ class _TaxiListState extends State<TaxiList> {
       itemCount: 5,
     );
   }
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-          children: <Widget>[
-        Container(
-          margin: const EdgeInsets.all(10),
-          child: leaveArrive(),
-        ),
-        Container(
-          child: CalendarSection(),
-        ),
-        Divider(
-          color: Colors.black26,
-          height: 30,
-        ),
-            SizedBox(
-              height: 550.0,
-              child: listWidget(),
-            )
-      ],
+        children: <Widget>[
+          Container(
+            margin: const EdgeInsets.all(10),
+            child: leaveArrive(),
+          ),
+          Container(
+            child: CalendarSection(),
+          ),
+          Divider(
+            color: Colors.black26,
+            height: 30,
+          ),
+          SizedBox(
+            height: 550.0,
+            child: listWidget(),
+          )
+        ],
       ),
     );
   }
@@ -435,6 +454,7 @@ class _CarListState extends State<CarList> {
       itemCount: 5,
     );
   }
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
@@ -519,4 +539,3 @@ TabBar createTabBar() {
     ],
   );
 }
-
