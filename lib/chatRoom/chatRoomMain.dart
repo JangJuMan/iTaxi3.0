@@ -229,10 +229,9 @@ Future<ChatRoomInfo> fetchChatRoomInfo() async {
     return ChatRoomInfo.fromJson(jsonDecode(response.body));
   }
   else{
-    throw Exception('Failed to load ChatROomInfo');
+    throw Exception('Failed to load ChatRoomInfo');
   }
 }
-
 
 
 
@@ -259,7 +258,6 @@ class ChatScreen extends StatefulWidget{
   State createState() => _ChatScreenState();
 }
 
-
 class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   String roomTitle = "채팅방 제목 placeholder";
   Future<ChatRoomInfo> futureChatRoomInfo;
@@ -272,6 +270,12 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   final FocusNode _focusNode = FocusNode();
   // 사용자가 입력중인가?
   bool _isWriting = false;
+  // 사용자 정보 확장 변수
+  bool _isVisible01 = true;
+  bool _isVisible02 = true;
+  bool _isVisible03 = true;
+  bool _isVisible04 = true;
+
 
   // 스크롤 컨트롤러 객체
   ScrollController _scrollController = new ScrollController();
@@ -489,6 +493,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             ),
           ),
           Container(
+            margin: EdgeInsets.only(left: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 10.0),
             child: Column(
               children: [
                 Theme.of(context).platform == TargetPlatform.iOS
@@ -500,11 +505,11 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                       onPressed: () => {},
                     )
                     : RaisedButton(
-                      child: Text('방 나가기'),
+                      child: Text('방 나가기', style: TextStyle(color: Colors.white)),
+                      color: Colors.redAccent,
                       onPressed: () => {},
                     ),
                 // TODO: 방장한테만 보이기, (상관없나?)
-                // TODO: 버튼 스타일 보여주려고 지금은 != 로 해놓음. 나중에 바꿔야함.
                 Theme.of(context).platform == TargetPlatform.iOS
                     ? CupertinoButton(
                       child: Text(
@@ -514,7 +519,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                       onPressed: () => {},
                     )
                     : RaisedButton(
-                      child: Text('정산하기'),
+                      child: Text('정산하기', style: TextStyle(color: Colors.white)),
+                      color: Colors.indigoAccent,
                       onPressed: () => {},
                     ),
               ],
@@ -530,25 +536,26 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   // ignore: non_constant_identifier_names
   Container _cmp_participantInfo(){
     return Container(
+      padding: EdgeInsets.symmetric(vertical: 2.0),
       decoration: BoxDecoration(
         border: Border(
           // bottom: BorderSide(width: 1.0, color: Colors.black26),
         ),
         color: Colors.black12,
       ),
-      // 컨테이너의 높이를 60로 설정
-      height: 60.0,
+      // 컨테이너의 높이를 설정
+      height: 55.0,
       // 리스트뷰 추가
       child: ListView(
         // 스크롤 방향 설정. 수평적으로 스크롤되도록 설정
         scrollDirection: Axis.horizontal,
         // 컨테이너들을 ListView의 자식들로 추가
         children: [
-          // TODO: 반복문
-          _elem_participantUnit('장주만'),
-          _elem_participantUnit('홍길참'),
-          _elem_participantUnit('김참길'),
-          _elem_participantUnit('고베어'),
+          // TODO: 반복문... 안써도 되나?
+          _elem_participantUnit('장주만', 1, _isVisible01),
+          _elem_participantUnit('홍길참', 2, _isVisible02),
+          _elem_participantUnit('김참길', 3, _isVisible03),
+          _elem_participantUnit('고베어', 4, _isVisible04),
         ],
       ),
     );
@@ -556,7 +563,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   // Element: 참가자 정보 유닛
   // ignore: non_constant_identifier_names
-  Container _elem_participantUnit(name){
+  Container _elem_participantUnit(name, btnNumber, bool isVisible){
     return Container(
       margin: EdgeInsets.symmetric(vertical: 2.0, horizontal: 3.0),
       padding: EdgeInsets.symmetric(horizontal: 4.0),
@@ -568,18 +575,47 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       child: Row(
         children: [
           IconButton(
-            padding: EdgeInsets.all(0),
-            icon: CircleAvatar(child: Text(name[1] + name[2])),
-            // TODO: onPressed 할 때, 확장 및 축소
-            onPressed: () => {},
+            iconSize: 60,
+            icon: Container(
+              padding: EdgeInsets.all(5.0),
+              decoration: BoxDecoration(
+                // border: Border.all(width: 1.0),
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Text(name, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+            ),
+            onPressed: () {
+              setState(() {
+                if(btnNumber == 1){
+                  _isVisible01 = !_isVisible01;
+                }
+                else if(btnNumber == 2){
+                  _isVisible02 = !_isVisible02;
+                }
+                else if(btnNumber == 3){
+                  _isVisible03 = !_isVisible03;
+                }
+                else if(btnNumber == 4){
+                  _isVisible04 = !_isVisible04;
+                }
+              });
+            },
           ),
-          IconButton(
-              icon: Icon(Icons.call, size: 20),
-              onPressed: () => {}
+          Visibility(
+            visible: isVisible,
+            child: IconButton(
+                icon: Icon(Icons.call, size: 20),
+                // TODO: 전화연결
+                onPressed: () => {}
+            ),
           ),
-          IconButton(
-              icon: Icon(Icons.message, size: 20),
-              onPressed: () => {}
+          Visibility(
+            visible: isVisible,
+            child: IconButton(
+                icon: Icon(Icons.message, size: 20),
+                // TODO: 문자 보내기
+                onPressed: () => {}
+            ),
           ),
         ],
       ),
