@@ -25,14 +25,21 @@ dependencies:
     sdk: flutter
 
   # 주만: http로 데이터 가져오기 테스트 (01/07)
-  http: 0.12.2
+  http: ^0.12.2
 
   # 주만: date time format
   intl: ^0.16.0
 
+  english_words: ^3.1.0
+  grouped_list: ^3.7.1
+  dropdownfield: ^0.0.2
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
+  table_calendar: ^2.0.1
+  flutter_svg: ^0.18.1
+
 
 
 
