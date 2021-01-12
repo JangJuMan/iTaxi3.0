@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'screen/listpage.dart';
+import 'screen/timelinepage.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,7 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'itaxi',
-      home: TaxiCarList(title: '조회 / 모집'),
+      home: TimeLine(),
     );
   }
 }
