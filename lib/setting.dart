@@ -42,9 +42,9 @@ class _MyHomePageState extends State<MyHomePage> {
             style: TextStyle(fontSize: 35)
         ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-          )
+          // IconButton(
+          //   icon: Icon(Icons.logout),
+          // )
         ],
       ),
       body: BodyLayout(),
@@ -67,7 +67,7 @@ Widget _myListView(BuildContext context) {
       context: context,
       tiles: [
         ListTile(
-          leading: Icon(Icons.notes_rounded),
+          // leading: Icon(Icons.notes_rounded),
           title: Text('공지사항',
               style: TextStyle(fontSize: 20)),
           onTap: () {
@@ -89,7 +89,7 @@ Widget _myListView(BuildContext context) {
           },
         ),
         ListTile(
-          leading: Icon(Icons.privacy_tip_rounded),
+          // leading: Icon(Icons.privacy_tip_rounded),
           title: Text('버전정보/개발자',
               style: TextStyle(fontSize: 20)),
           onTap: () {
@@ -111,7 +111,7 @@ Widget _myListView(BuildContext context) {
             }
         ),
         ListTile(
-            leading: Icon(Icons.bug_report_outlined),
+            // leading: Icon(Icons.bug_report_outlined),
             title: Text('버그제보',
                 style: TextStyle(fontSize: 20)),
             onTap: () {
