@@ -237,21 +237,21 @@ Future<ChatRoomInfo> fetchChatRoomInfo() async {
 
 
 // 채팅방 메인
-class ChatRoomMain extends StatelessWidget {
-  const ChatRoomMain({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: defaultTargetPlatform == TargetPlatform.iOS ? kIOSTheme : kDefaultTheme,
-
-      // home: 기본화면 지정
-      home: ChatScreen(),
-    );
-  }
-}
+// class ChatRoomMain extends StatelessWidget {
+//   const ChatRoomMain({
+//     Key key,
+//   }) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       theme: defaultTargetPlatform == TargetPlatform.iOS ? kIOSTheme : kDefaultTheme,
+//
+//       // home: 기본화면 지정
+//       home: ChatScreen(),
+//     );
+//   }
+// }
 
 class ChatScreen extends StatefulWidget{
   @override

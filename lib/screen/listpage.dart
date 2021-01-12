@@ -2,16 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:itaxi/screen/pluspage.dart';
 import 'package:flutter/cupertino.dart';
 
-// 주만: merge 용으로 분리함.
-class ListOfRooms extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'itaxi',
-      home: TaxiCarList(title: '조회 / 모집'),
-    );
-  }
-}
 
 class TaxiCarList extends StatefulWidget {
   TaxiCarList({Key key, this.title}) : super(key: key);
@@ -243,31 +233,31 @@ class _TaxiListState extends State<TaxiList> {
     super.initState();
     datas = [
       {
-        "people": "assets/image/Final-oneblue.png",
+        "people": "assets/images/Final-oneblue.png",
         "time": "13:00",
         "leave": "한동대",
         "arrive": "커피유야",
       },
       {
-        "people": "assets/image/Final-twoblue.png",
+        "people": "assets/images/Final-twoblue.png",
         "time": "19:00",
         "leave": "다이소",
         "arrive": "포항역",
       },
       {
-        "people": "assets/image/Final-oneblue.png",
+        "people": "assets/images/Final-oneblue.png",
         "time": "10:00",
         "leave": "세차장",
         "arrive": "한동대",
       },
       {
-        "people": "assets/image/Final-threeblue.png",
+        "people": "assets/images/Final-threeblue.png",
         "time": "12:00",
         "leave": "시외버스터미널",
         "arrive": "커피유야",
       },
       {
-        "people": "assets/image/Final-fourblue.png",
+        "people": "assets/images/Final-fourblue.png",
         "time": "20:00",
         "leave": "한동대",
         "arrive": "육거리",
@@ -306,7 +296,7 @@ class _TaxiListState extends State<TaxiList> {
                 children: <Widget>[
                   Padding(
                       padding: EdgeInsets.all(15),
-                      child: Image.asset("assets/image/Final-fromto.gif"))
+                      child: Image.asset("assets/images/Final-fromto.gif"))
                 ],
               ),
               Column(
@@ -371,31 +361,31 @@ class _CarListState extends State<CarList> {
     super.initState();
     datas = [
       {
-        "people": "assets/image/Final-oneblue.png",
+        "people": "assets/images/Final-oneblue.png",
         "time": "13:00",
         "leave": "한동대",
         "arrive": "커피유야",
       },
       {
-        "people": "assets/image/Final-twoblue.png",
+        "people": "assets/images/Final-twoblue.png",
         "time": "19:00",
         "leave": "다이소",
         "arrive": "포항역",
       },
       {
-        "people": "assets/image/Final-oneblue.png",
+        "people": "assets/images/Final-oneblue.png",
         "time": "10:00",
         "leave": "세차장",
         "arrive": "한동대",
       },
       {
-        "people": "assets/image/Final-threeblue.png",
+        "people": "assets/images/Final-threeblue.png",
         "time": "12:00",
         "leave": "시외버스터미널",
         "arrive": "커피유야",
       },
       {
-        "people": "assets/image/Final-fourblue.png",
+        "people": "assets/images/Final-fourblue.png",
         "time": "20:00",
         "leave": "한동대",
         "arrive": "육거리",
@@ -434,7 +424,7 @@ class _CarListState extends State<CarList> {
                 children: <Widget>[
                   Padding(
                       padding: EdgeInsets.all(15),
-                      child: Image.asset("assets/image/Final-fromto.gif"))
+                      child: Image.asset("assets/images/Final-fromto.gif"))
                 ],
               ),
               Column(

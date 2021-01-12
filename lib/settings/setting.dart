@@ -8,31 +8,32 @@ import 'updateInfo.dart';
 import 'version.dart';
 import 'logout.dart';
 
-class SettingPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '',
-      theme: ThemeData(
-        primaryColor: Colors.white,
-      ),
-      home: MyHomePage(
-        title: '설정',
-      ),
-    );
-  }
-}
+// 세팅 페이지 이름좀 바꿨습니다. (MyHomePage --> Settings)
+// class SettingPage extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: '',
+//       theme: ThemeData(
+//         primaryColor: Colors.white,
+//       ),
+//       home: Settings(
+//         title: '설정',
+//       ),
+//     );
+//   }
+// }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class Settings extends StatefulWidget {
+  Settings({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _SettingsState createState() => _SettingsState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
