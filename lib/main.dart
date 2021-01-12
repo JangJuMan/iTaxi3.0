@@ -34,10 +34,10 @@ class MyApp extends StatelessWidget {
       // ),
       home:
       SignIn(),
-      // SignUp(),
-      // ChatScreen(),
-      // TaxiCarList(),
-      // Settings(title: '설정'),
+       //SignUp(),
+      //ChatScreen(),
+       //TaxiCarList(),
+       //Settings(title: '설정'),
     );
   }
 }

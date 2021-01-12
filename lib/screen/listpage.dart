@@ -534,7 +534,7 @@ TabBar createTabBar() {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [Icon(Icons.local_taxi, color: Colors.blue), Text('택시')]),
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        // Icon(Icons.drive_eta_rounded, color: Colors.blue),
+        Icon(Icons.drive_eta_rounded, color: Colors.blue),
         Text('카풀')
       ]),
     ],
