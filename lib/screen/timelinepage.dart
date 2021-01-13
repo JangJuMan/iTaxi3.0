@@ -16,6 +16,56 @@ class RideLog extends StatefulWidget {
   _RideLogState createState() => _RideLogState();
 }
 
+Widget RideSoon() {
+  return Container(
+    child: Row(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.all(15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Text(
+                '13:00',
+                style: TextStyle(fontSize: 19),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 14.0),
+                child: Image.asset(
+                  Icon("assets/images/Final-fourblue"),
+                  width: 40,
+                  height: 40,
+                ),
+              )
+            ],
+          ),
+        ),
+        Column(
+          children: <Widget>[
+            Padding(
+                padding: EdgeInsets.all(15),
+                child: Image.asset("assets/image/Final-fromto.gif"))
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(bottom: 12.0),
+              child: Text(datas[index]["leave"],
+                  style: TextStyle(fontSize: 15)),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 12.0),
+              child: Text(datas[index]["arrive"],
+                  style: TextStyle(fontSize: 15)),
+            )
+          ],
+        ),
+      ],
+    ),
+  );
+}
 
 
 
@@ -45,7 +95,14 @@ class _TimeLineState extends State<TimeLine> {
               )
             ],
           ),
-          body: RideLog(),
+          body: Container(
+            child: Column(
+              children: <Widget>[
+                Text('곧 탑승 예정'),
+                RideSoon(),
+              ],
+            )
+          ),
           ),
     );
   }
