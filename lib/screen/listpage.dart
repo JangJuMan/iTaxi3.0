@@ -60,7 +60,7 @@ class _LeaveMenuState extends State<LeaveMenu> {
         child: Text('출발'),
       ),
       value: dropdownValue,
-      icon: Icon(Icons.arrow_drop_down_outlined),
+      // icon: Icon(Icons.arrow_drop_down_outlined),
       iconEnabledColor: Colors.black26,
       iconSize: 25,
       elevation: 12,
@@ -89,7 +89,7 @@ class _ArriveMenuState extends State<ArriveMenu> {
     return DropdownButton<String>(
       hint: Text('도착'),
       value: dropdownValue,
-      icon: Icon(Icons.arrow_drop_down_outlined),
+      // icon: Icon(Icons.arrow_drop_down_outlined),
       iconEnabledColor: Colors.black26,
       iconSize: 25,
       elevation: 12,
@@ -533,7 +533,7 @@ TabBar createTabBar() {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [Icon(Icons.local_taxi, color: Colors.blue), Text('택시')]),
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Icon(Icons.drive_eta_rounded, color: Colors.blue),
+        // Icon(Icons.drive_eta_rounded, color: Colors.blue),
         Text('카풀')
       ]),
     ],
