@@ -7,15 +7,7 @@ import 'screen/listpage.dart';
 import 'signInUp/signIn.dart';
 import 'signInUp/signUp.dart';
 import 'themes.dart';
-//
-// void main() {
-//   runApp(
-//     // ChatRoomMain(),
-//     // SettingPage(),
-//     ListOfRooms(),
-//   );
-// }
-//
+
 
 void main() {
   runApp(MyApp());
@@ -33,10 +25,10 @@ class MyApp extends StatelessWidget {
       //   visualDensity: VisualDensity.adaptivePlatformDensity,
       // ),
       home:
-      SignIn(),
-       //SignUp(),
-      //ChatScreen(),
-       //TaxiCarList(),
+       SignIn(),
+       // SignUp(),
+       // ChatScreen(),
+       // TaxiCarList(),
        //Settings(title: '설정'),
     );
   }

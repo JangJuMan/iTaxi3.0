@@ -534,7 +534,8 @@ TabBar createTabBar() {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [Icon(Icons.local_taxi, color: Colors.blue), Text('택시')]),
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Icon(Icons.drive_eta_rounded, color: Colors.blue),
+        // 주만: 난 왜 아이콘이 로드가 안되지... rounded는 안되고 이건 되서 컴파일 하려고 이거로 바꿔낌.
+        Icon(Icons.drive_eta, color: Colors.blue),
         Text('카풀')
       ]),
     ],
