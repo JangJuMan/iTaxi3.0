@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:itaxi/chatRoom/chatRoomMain.dart';
 import 'package:itaxi/screen/pluspage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:itaxi/settings/setting.dart';
+
+import '../customPageRoutes.dart';
+import '../main.dart';
 
 
 class TaxiCarList extends StatefulWidget {
@@ -228,9 +233,11 @@ class _CalendarState extends State<CalendarSection> {
 //taxi all
 class _TaxiListState extends State<TaxiList> {
   List<Map<String, String>> datas = [];
+
   @override
   void initState() {
     super.initState();
+    ContextKeeper().init(context);
     datas = [
       {
         "people": "assets/images/Final-oneblue.png",
@@ -269,59 +276,84 @@ class _TaxiListState extends State<TaxiList> {
     return ListView.separated(
       itemBuilder: (BuildContext context, int index) {
         return Container(
-          child: Row(
-            //mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+          // 주만: 카드형식으로 수정. (리스트 형식이랑 비교 후, 둘 중 하나로 통합)
+          margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 7.0),
+          decoration: BoxDecoration(
+            border: Border.all(width: 1.0, color: Colors.black26),
+            borderRadius: BorderRadius.circular(8.0),
+            // color: Colors.white,
+            // boxShadow: [
+            //   BoxShadow(
+            //     blurRadius: 0.5,
+            //     offset: Offset(0.5, 0.5),
+            //   ),
+            // ],
+          ),
+          child: InkWell(
+            // 주만: tap 효과를 위해.
+            onTap: () {
+              // Navigator
+              // Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => new ChatScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateInfo()),);
+              // Navigator.of(context).pushNamed("/ChatScreen");
+              // Navigator.pushNamedAndRemoveUntil(ContextKeeper.buildContext, 'ChatScreen', (_) => false);
+            },
+            child: Row(
+              //mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Text(
+                        datas[index]["time"],
+                        style: TextStyle(fontSize: 19),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 14.0),
+                        child: Image.asset(
+                          datas[index]["people"],
+                          width: 40,
+                          height: 40,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Column(
                   children: <Widget>[
-                    Text(
-                      datas[index]["time"],
-                      style: TextStyle(fontSize: 19),
+                    Padding(
+                        padding: EdgeInsets.all(15),
+                        child: Image.asset("assets/images/Final-fromto.gif"))
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 12.0),
+                      child: Text(datas[index]["leave"],
+                          style: TextStyle(fontSize: 15)),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 14.0),
-                      child: Image.asset(
-                        datas[index]["people"],
-                        width: 40,
-                        height: 40,
-                      ),
+                      padding: EdgeInsets.only(top: 12.0),
+                      child: Text(datas[index]["arrive"],
+                          style: TextStyle(fontSize: 15)),
                     )
                   ],
                 ),
-              ),
-              Column(
-                children: <Widget>[
-                  Padding(
-                      padding: EdgeInsets.all(15),
-                      child: Image.asset("assets/images/Final-fromto.gif"))
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 12.0),
-                    child: Text(datas[index]["leave"],
-                        style: TextStyle(fontSize: 15)),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 12.0),
-                    child: Text(datas[index]["arrive"],
-                        style: TextStyle(fontSize: 15)),
-                  )
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
       separatorBuilder: (BuildContext context, int index) {
         return Container(
-          height: 1,
-          color: Colors.black26,
+          // 주만: 구분선 삭제
+          // height: 1,
+          // color: Colors.black26,
         );
       },
       itemCount: 5,
@@ -343,8 +375,9 @@ class _TaxiListState extends State<TaxiList> {
             color: Colors.black26,
             height: 30,
           ),
-          SizedBox(
-            height: 550.0,
+          // 주만: 기존의 SizedBox + height: 550 으로 처리되었던 부분을
+          // 다양한 크기의 스크린에서의 호환성을 위해 Flexible로 변경
+          Flexible(
             child: listWidget(),
           )
         ],
@@ -471,8 +504,9 @@ class _CarListState extends State<CarList> {
             color: Colors.black26,
             height: 30,
           ),
-          SizedBox(
-            height: 550.0,
+          // 주만: 기존의 SizedBox + height: 550 으로 처리되었던 부분을
+          // 다양한 크기의 스크린에서의 호환성을 위해 Flexible로 변경
+          Flexible(
             child: listWidget(),
           )
         ],
@@ -511,7 +545,8 @@ class _TaxiCarListState extends State<TaxiCarList> {
               )
             ],
           ),
-          body: TabBarView(
+          body:
+          TabBarView(
             children: <Widget>[
               TaxiList(),
               CarList(),

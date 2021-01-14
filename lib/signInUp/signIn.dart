@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:itaxi/customPageRoutes.dart';
 import 'package:itaxi/screen/listpage.dart';
 import 'package:itaxi/signInUp/signUp.dart';
+import 'package:itaxi/main.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -176,7 +177,10 @@ class _SignInState extends State<SignIn> {
                                       if(_loginCheck()){
                                         // Navigator.push(context, MaterialPageRoute(builder: (context) => TaxiCarList()));
                                         // Navigator.push(context, BouncyPageRoute(widget: TaxiCarList()),);
-                                        Navigator.of(context).push(FadeInOutPageRoute(TaxiCarList()));
+                                        // Navigator.of(context).push(FadeInOutPageRoute(TaxiCarList()));
+
+
+                                        Navigator.of(context).push(FadeInOutPageRoute(TapMenus()));
                                       }
                                       // _signIn();
                                     },
@@ -194,7 +198,8 @@ class _SignInState extends State<SignIn> {
                             RawMaterialButton(
                               onPressed: () {
                                 // Navigate
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
+                                Navigator.pushNamed(context, 'SignUp');
+                                // Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
                               },
                               child: Text(
                                 'Sign Up',

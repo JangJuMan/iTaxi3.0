@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart'; // 테마
 import 'package:flutter/cupertino.dart';  // 플랫폼별 버튼
 import 'package:intl/intl.dart';          // Datetime format
+import 'package:itaxi/main.dart';
 import 'package:itaxi/themes.dart';       // 이거 임포트 경로가 다를 수 있음. 깃헙이름이 iTaxi 3.0이라서 내 로컬이랑 다를수도..
 
 import 'package:http/http.dart' as http;  // 네트워크 통신 테스트
@@ -342,6 +343,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         // TODO: 나중에 setState로 ??? 방장? 이런식으로 제목 바꾸기
         title: Text(roomTitle),
