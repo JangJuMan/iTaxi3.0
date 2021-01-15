@@ -9,24 +9,31 @@ import '../main.dart';
 
 
 class TaxiCarList extends StatefulWidget {
-  TaxiCarList({Key key, this.title}) : super(key: key);
+  final Function onNext;
+
+  TaxiCarList({Key key, this.title, this.onNext}) : super(key: key);
   final String title;
 
   @override
-  _TaxiCarListState createState() => _TaxiCarListState();
+  _TaxiCarListState createState() => _TaxiCarListState(onNext);
 }
 
 class TaxiList extends StatefulWidget {
-  TaxiList({Key key, this.title}) : super(key: key);
+  final Function onNext;
   final String title;
 
+  TaxiList({Key key, this.title, this.onNext}) : super(key: key);
+
   @override
-  _TaxiListState createState() => _TaxiListState();
+  _TaxiListState createState() => _TaxiListState(onNext);
 }
 
 class CarList extends StatefulWidget {
-  CarList({Key key, this.title}) : super(key: key);
   final String title;
+  final Function onNext;
+
+  CarList({Key key, this.title, this.onNext}) : super(key: key);
+
 
   @override
   _CarListState createState() => _CarListState();
@@ -232,12 +239,16 @@ class _CalendarState extends State<CalendarSection> {
 
 //taxi all
 class _TaxiListState extends State<TaxiList> {
+  final Function onNext;
+
+  _TaxiListState(this.onNext);
+
   List<Map<String, String>> datas = [];
+
 
   @override
   void initState() {
     super.initState();
-    ContextKeeper().init(context);
     datas = [
       {
         "people": "assets/images/Final-oneblue.png",
@@ -292,12 +303,11 @@ class _TaxiListState extends State<TaxiList> {
           child: InkWell(
             // 주만: tap 효과를 위해.
             onTap: () {
-              // Navigator
-              // Navigator.of(context, rootNavigator: true).pushReplacement(MaterialPageRoute(builder: (context) => new ChatScreen()));
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
-              // Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateInfo()),);
-              // Navigator.of(context).pushNamed("/ChatScreen");
-              // Navigator.pushNamedAndRemoveUntil(ContextKeeper.buildContext, 'ChatScreen', (_) => false);
+              // 하단 네비게이터 유지 x
+              onNext(ChatScreen());
+
+              // 하단 네비게이터 유지 o
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
             },
             child: Row(
               //mainAxisAlignment: MainAxisAlignment.center,
@@ -517,6 +527,10 @@ class _CarListState extends State<CarList> {
 
 //all
 class _TaxiCarListState extends State<TaxiCarList> {
+  final Function onNext;
+
+  _TaxiCarListState(this.onNext);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -548,8 +562,8 @@ class _TaxiCarListState extends State<TaxiCarList> {
           body:
           TabBarView(
             children: <Widget>[
-              TaxiList(),
-              CarList(),
+              TaxiList(onNext: onNext,),
+              CarList(onNext: onNext),
               //Icon(Icons.drive_eta_rounded),
             ],
           ),

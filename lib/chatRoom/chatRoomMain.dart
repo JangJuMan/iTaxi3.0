@@ -343,7 +343,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      // resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         // TODO: 나중에 setState로 ??? 방장? 이런식으로 제목 바꾸기
         title: Text(roomTitle),

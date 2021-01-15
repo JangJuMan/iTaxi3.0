@@ -40,6 +40,9 @@ dependencies:
   table_calendar: ^2.0.1
   flutter_svg: ^0.18.1
 
+  # 플러터 토스트
+  fluttertoast: ^4.0.1
+
 
 
 

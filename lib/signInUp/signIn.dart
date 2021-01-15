@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:itaxi/customPageRoutes.dart';
+import 'package:itaxi/mainScreen.dart';
 import 'package:itaxi/screen/listpage.dart';
 import 'package:itaxi/signInUp/signUp.dart';
 import 'package:itaxi/main.dart';
@@ -180,7 +181,7 @@ class _SignInState extends State<SignIn> {
                                         // Navigator.of(context).push(FadeInOutPageRoute(TaxiCarList()));
 
 
-                                        Navigator.of(context).push(FadeInOutPageRoute(TapMenus()));
+                                        Navigator.of(context).push(FadeInOutPageRoute(MainScreen()));
                                       }
                                       // _signIn();
                                     },
@@ -198,8 +199,8 @@ class _SignInState extends State<SignIn> {
                             RawMaterialButton(
                               onPressed: () {
                                 // Navigate
-                                Navigator.pushNamed(context, 'SignUp');
-                                // Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
+                                // Navigator.pushNamed(context, 'SignUp');
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
                               },
                               child: Text(
                                 'Sign Up',
