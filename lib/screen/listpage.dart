@@ -36,7 +36,7 @@ class CarList extends StatefulWidget {
 
 
   @override
-  _CarListState createState() => _CarListState();
+  _CarListState createState() => _CarListState(onNext);
 }
 
 class LeaveMenu extends StatefulWidget {
@@ -290,15 +290,17 @@ class _TaxiListState extends State<TaxiList> {
           // 주만: 카드형식으로 수정. (리스트 형식이랑 비교 후, 둘 중 하나로 통합)
           margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 7.0),
           decoration: BoxDecoration(
-            border: Border.all(width: 1.0, color: Colors.black26),
+            // border: Border.all(width: 1.0, color: Colors.black26),
             borderRadius: BorderRadius.circular(8.0),
-            // color: Colors.white,
-            // boxShadow: [
-            //   BoxShadow(
-            //     blurRadius: 0.5,
-            //     offset: Offset(0.5, 0.5),
-            //   ),
-            // ],
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 4,
+                spreadRadius: 3,
+                color: Colors.black12,
+                offset: Offset(1.0, 3.0),
+              ),
+            ],
           ),
           child: InkWell(
             // 주만: tap 효과를 위해.
@@ -398,7 +400,13 @@ class _TaxiListState extends State<TaxiList> {
 
 //carpool all
 class _CarListState extends State<CarList> {
+  final Function onNext;
+
+  _CarListState(this.onNext);
+
   List<Map<String, String>> datas = [];
+
+
   @override
   void initState() {
     super.initState();
@@ -440,59 +448,85 @@ class _CarListState extends State<CarList> {
     return ListView.separated(
       itemBuilder: (BuildContext context, int index) {
         return Container(
-          child: Row(
-            //mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+          // 주만: 카드형식으로 수정. (리스트 형식이랑 비교 후, 둘 중 하나로 통합)
+          margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 7.0),
+          decoration: BoxDecoration(
+            // border: Border.all(width: 1.0, color: Colors.black26),
+            borderRadius: BorderRadius.circular(8.0),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 4,
+                spreadRadius: 3,
+                color: Colors.black12,
+                offset: Offset(1.0, 3.0),
+              ),
+            ],
+          ),
+          child: InkWell(
+            // 주만: tap 효과를 위해.
+            onTap: () {
+              // 하단 네비게이터 유지 x
+              onNext(ChatScreen());
+
+              // 하단 네비게이터 유지 o
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
+            },
+            child: Row(
+              //mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Text(
+                        datas[index]["time"],
+                        style: TextStyle(fontSize: 19),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 14.0),
+                        child: Image.asset(
+                          datas[index]["people"],
+                          width: 40,
+                          height: 40,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Column(
                   children: <Widget>[
-                    Text(
-                      datas[index]["time"],
-                      style: TextStyle(fontSize: 19),
+                    Padding(
+                        padding: EdgeInsets.all(15),
+                        child: Image.asset("assets/images/Final-fromto.gif"))
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 12.0),
+                      child: Text(datas[index]["leave"],
+                          style: TextStyle(fontSize: 15)),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 14.0),
-                      child: Image.asset(
-                        datas[index]["people"],
-                        width: 40,
-                        height: 40,
-                      ),
+                      padding: EdgeInsets.only(top: 12.0),
+                      child: Text(datas[index]["arrive"],
+                          style: TextStyle(fontSize: 15)),
                     )
                   ],
                 ),
-              ),
-              Column(
-                children: <Widget>[
-                  Padding(
-                      padding: EdgeInsets.all(15),
-                      child: Image.asset("assets/images/Final-fromto.gif"))
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 12.0),
-                    child: Text(datas[index]["leave"],
-                        style: TextStyle(fontSize: 15)),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 12.0),
-                    child: Text(datas[index]["arrive"],
-                        style: TextStyle(fontSize: 15)),
-                  )
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
       separatorBuilder: (BuildContext context, int index) {
         return Container(
-          height: 1,
-          color: Colors.black26,
+          // 주만: 구분선 삭제
+          // height: 1,
+          // color: Colors.black26,
         );
       },
       itemCount: 5,

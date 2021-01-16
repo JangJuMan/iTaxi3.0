@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:itaxi/screen/listpage.dart';
+import 'package:itaxi/screen/timelinepage.dart';
 import 'package:itaxi/settings/setting.dart';
 import 'package:itaxi/themes.dart';
 
@@ -144,7 +145,7 @@ class _MainScreenState extends State<MainScreen> {
       '/': (context) {
         return [
 
-          Center(child: Text('지난 기록 페이지')),
+          TimeLine(),
           TaxiCarList(onNext: _next,),
           Settings(),
           // CalendarPage(
