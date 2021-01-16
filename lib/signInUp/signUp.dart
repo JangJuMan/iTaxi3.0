@@ -20,6 +20,11 @@ class _SignUpState extends State<SignUp> {
   TextEditingController _pwCon = TextEditingController();
   TextEditingController _pwCheckCon = TextEditingController();
 
+  // TODO: 기능구현
+  bool _signUp(){
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,6 +39,7 @@ class _SignUpState extends State<SignUp> {
           ),
           onTap: () {
             // Navigate
+            Navigator.pop(context);
           },
         ),
         centerTitle: true,
@@ -269,6 +275,9 @@ class _SignUpState extends State<SignUp> {
                           ),
                           onPressed: () {
                             // _signUp();
+                            if(_signUp()){
+                              Navigator.pop(context);
+                            }
                           },
                           child: Text(
                             'Sign Up',

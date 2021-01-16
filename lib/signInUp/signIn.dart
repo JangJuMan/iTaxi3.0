@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:itaxi/customPageRoutes.dart';
+import 'package:itaxi/mainScreen.dart';
+import 'package:itaxi/screen/listpage.dart';
+import 'package:itaxi/signInUp/signUp.dart';
+import 'package:itaxi/main.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -12,6 +17,11 @@ class _SignInState extends State<SignIn> {
 
   final _formKey = GlobalKey<FormState>();
   var _blankFocusnode = new FocusNode();
+
+  // TODO: 기능추가
+  bool _loginCheck(){
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,6 +175,14 @@ class _SignInState extends State<SignIn> {
                                     ),
                                     onPressed: () {
                                       FocusScope.of(context).requestFocus(new FocusNode());
+                                      if(_loginCheck()){
+                                        // Navigator.push(context, MaterialPageRoute(builder: (context) => TaxiCarList()));
+                                        // Navigator.push(context, BouncyPageRoute(widget: TaxiCarList()),);
+                                        // Navigator.of(context).push(FadeInOutPageRoute(TaxiCarList()));
+
+
+                                        Navigator.of(context).push(FadeInOutPageRoute(MainScreen()));
+                                      }
                                       // _signIn();
                                     },
                                     child: Text(
@@ -181,6 +199,8 @@ class _SignInState extends State<SignIn> {
                             RawMaterialButton(
                               onPressed: () {
                                 // Navigate
+                                // Navigator.pushNamed(context, 'SignUp');
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
                               },
                               child: Text(
                                 'Sign Up',

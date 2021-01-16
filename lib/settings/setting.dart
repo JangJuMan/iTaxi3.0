@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:itaxi/chatRoom/chatRoomMain.dart';
 import 'alarm.dart';
 import 'bug.dart';
 import 'detailNotice.dart';
@@ -25,10 +26,6 @@ import 'logout.dart';
 // }
 
 class Settings extends StatefulWidget {
-  Settings({Key key, this.title}) : super(key: key);
-
-  final String title;
-
   @override
   _SettingsState createState() => _SettingsState();
 }
@@ -39,9 +36,7 @@ class _SettingsState extends State<Settings> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(widget.title,
-            style: TextStyle(fontSize: 35)
-        ),
+        title: Text('설정',),
         actions: [
           // IconButton(
           //   icon: Icon(Icons.logout),
@@ -72,6 +67,9 @@ Widget _myListView(BuildContext context) {
           title: Text('공지사항',
               style: TextStyle(fontSize: 20)),
           onTap: () {
+            // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
+            // Navigator.pushNamed(context, 'UpdateInfo');
+
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => UpdateInfo()),
@@ -112,6 +110,7 @@ Widget _myListView(BuildContext context) {
             }
         ),
         ListTile(
+            leading: Icon(Icons.bug_report),
             // leading: Icon(Icons.bug_report_outlined),
             title: Text('버그제보',
                 style: TextStyle(fontSize: 20)),

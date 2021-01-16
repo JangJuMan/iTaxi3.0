@@ -1,27 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:itaxi/chatRoom/chatRoomMain.dart';
 import 'package:itaxi/screen/pluspage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:itaxi/settings/setting.dart';
+
+import '../customPageRoutes.dart';
+import '../main.dart';
 
 
 class TaxiCarList extends StatefulWidget {
-  TaxiCarList({Key key, this.title}) : super(key: key);
+  final Function onNext;
+
+  TaxiCarList({Key key, this.title, this.onNext}) : super(key: key);
   final String title;
 
   @override
-  _TaxiCarListState createState() => _TaxiCarListState();
+  _TaxiCarListState createState() => _TaxiCarListState(onNext);
 }
 
 class TaxiList extends StatefulWidget {
-  TaxiList({Key key, this.title}) : super(key: key);
+  final Function onNext;
   final String title;
 
+  TaxiList({Key key, this.title, this.onNext}) : super(key: key);
+
   @override
-  _TaxiListState createState() => _TaxiListState();
+  _TaxiListState createState() => _TaxiListState(onNext);
 }
 
 class CarList extends StatefulWidget {
-  CarList({Key key, this.title}) : super(key: key);
   final String title;
+  final Function onNext;
+
+  CarList({Key key, this.title, this.onNext}) : super(key: key);
+
 
   @override
   _CarListState createState() => _CarListState();
@@ -227,7 +239,13 @@ class _CalendarState extends State<CalendarSection> {
 
 //taxi all
 class _TaxiListState extends State<TaxiList> {
+  final Function onNext;
+
+  _TaxiListState(this.onNext);
+
   List<Map<String, String>> datas = [];
+
+
   @override
   void initState() {
     super.initState();
@@ -268,6 +286,7 @@ class _TaxiListState extends State<TaxiList> {
   Widget listWidget() {
     return ListView.separated(
       itemBuilder: (BuildContext context, int index) {
+<<<<<<< HEAD
         return GestureDetector(
           onTap: () {
             Navigator.push(
@@ -284,52 +303,86 @@ class _TaxiListState extends State<TaxiList> {
                 padding: EdgeInsets.all(15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
+=======
+        return Container(
+          // 주만: 카드형식으로 수정. (리스트 형식이랑 비교 후, 둘 중 하나로 통합)
+          margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 7.0),
+          decoration: BoxDecoration(
+            border: Border.all(width: 1.0, color: Colors.black26),
+            borderRadius: BorderRadius.circular(8.0),
+            // color: Colors.white,
+            // boxShadow: [
+            //   BoxShadow(
+            //     blurRadius: 0.5,
+            //     offset: Offset(0.5, 0.5),
+            //   ),
+            // ],
+          ),
+          child: InkWell(
+            // 주만: tap 효과를 위해.
+            onTap: () {
+              // 하단 네비게이터 유지 x
+              onNext(ChatScreen());
+
+              // 하단 네비게이터 유지 o
+              // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
+            },
+            child: Row(
+              //mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Text(
+                        datas[index]["time"],
+                        style: TextStyle(fontSize: 19),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 14.0),
+                        child: Image.asset(
+                          datas[index]["people"],
+                          width: 40,
+                          height: 40,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Column(
+>>>>>>> main
                   children: <Widget>[
-                    Text(
-                      datas[index]["time"],
-                      style: TextStyle(fontSize: 19),
+                    Padding(
+                        padding: EdgeInsets.all(15),
+                        child: Image.asset("assets/images/Final-fromto.gif"))
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 12.0),
+                      child: Text(datas[index]["leave"],
+                          style: TextStyle(fontSize: 15)),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 14.0),
-                      child: Image.asset(
-                        datas[index]["people"],
-                        width: 40,
-                        height: 40,
-                      ),
+                      padding: EdgeInsets.only(top: 12.0),
+                      child: Text(datas[index]["arrive"],
+                          style: TextStyle(fontSize: 15)),
                     )
                   ],
                 ),
-              ),
-              Column(
-                children: <Widget>[
-                  Padding(
-                      padding: EdgeInsets.all(15),
-                      child: Image.asset("assets/images/Final-fromto.gif"))
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 12.0),
-                    child: Text(datas[index]["leave"],
-                        style: TextStyle(fontSize: 15)),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 12.0),
-                    child: Text(datas[index]["arrive"],
-                        style: TextStyle(fontSize: 15)),
-                  )
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
             ),);
       },
       separatorBuilder: (BuildContext context, int index) {
         return Container(
-          height: 1,
-          color: Colors.black26,
+          // 주만: 구분선 삭제
+          // height: 1,
+          // color: Colors.black26,
         );
       },
       itemCount: datas.length,
@@ -338,6 +391,7 @@ class _TaxiListState extends State<TaxiList> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+<<<<<<< HEAD
       resizeToAvoidBottomPadding: false,
       body: SingleChildScrollView(
         child: Column(
@@ -359,6 +413,27 @@ class _TaxiListState extends State<TaxiList> {
             )
           ],
         ),
+=======
+      body: Column(
+        children: <Widget>[
+          Container(
+            margin: const EdgeInsets.all(10),
+            child: leaveArrive(),
+          ),
+          Container(
+            child: CalendarSection(),
+          ),
+          Divider(
+            color: Colors.black26,
+            height: 30,
+          ),
+          // 주만: 기존의 SizedBox + height: 550 으로 처리되었던 부분을
+          // 다양한 크기의 스크린에서의 호환성을 위해 Flexible로 변경
+          Flexible(
+            child: listWidget(),
+          )
+        ],
+>>>>>>> main
       ),
     );
   }
@@ -492,8 +567,9 @@ class _CarListState extends State<CarList> {
             color: Colors.black26,
             height: 30,
           ),
-          SizedBox(
-            height: 550.0,
+          // 주만: 기존의 SizedBox + height: 550 으로 처리되었던 부분을
+          // 다양한 크기의 스크린에서의 호환성을 위해 Flexible로 변경
+          Flexible(
             child: listWidget(),
           )
         ],
@@ -505,6 +581,10 @@ class _CarListState extends State<CarList> {
 
 //all
 class _TaxiCarListState extends State<TaxiCarList> {
+  final Function onNext;
+
+  _TaxiCarListState(this.onNext);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -533,10 +613,11 @@ class _TaxiCarListState extends State<TaxiCarList> {
               )
             ],
           ),
-          body: TabBarView(
+          body:
+          TabBarView(
             children: <Widget>[
-              TaxiList(),
-              CarList(),
+              TaxiList(onNext: onNext,),
+              CarList(onNext: onNext),
               //Icon(Icons.drive_eta_rounded),
             ],
           ),
@@ -556,7 +637,8 @@ TabBar createTabBar() {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [Icon(Icons.local_taxi, color: Colors.blue), Text('택시')]),
       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Icon(Icons.drive_eta_rounded, color: Colors.blue),
+        // 주만: 난 왜 아이콘이 로드가 안되지... rounded는 안되고 이건 되서 컴파일 하려고 이거로 바꿔낌.
+        Icon(Icons.drive_eta, color: Colors.blue),
         Text('카풀')
       ]),
     ],
