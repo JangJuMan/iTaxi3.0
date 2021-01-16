@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:my_app/screen/pluspage.dart';
+import 'package:intl/intl.dart';
+import 'package:itaxi/screen/pluspage.dart';
 
 class TimeLine extends StatefulWidget {
   TimeLine({Key key}) : super(key: key);
@@ -9,221 +10,243 @@ class TimeLine extends StatefulWidget {
   _TimeLineState createState() => _TimeLineState();
 }
 
-class RideLog extends StatefulWidget {
-  RideLog({Key key}) : super(key: key);
+Widget listWidget() {
+  return  Container(
+    margin: EdgeInsets.all(20),
+    decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(width: 1.0, color: Colors.black26),
+        boxShadow: [
+          BoxShadow(
+              spreadRadius: 2,
+              blurRadius: 5,
+              color: Colors.black26
 
-  @override
-  _RideLogState createState() => _RideLogState();
+          ),
+        ]
+    ),
+    child: Container(
+      child: Row(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.all(15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                Text(
+                  '13:00',
+                  style: TextStyle(fontSize: 19),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 14.0, top: 10.0),
+                  child: Image.asset("assets/images/Final-fourblue.png",
+                    width: 40,
+                    height: 40,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Column(
+            children: <Widget>[
+              Padding(
+                  padding: EdgeInsets.all(15),
+                  child: Image.asset("assets/images/Final-fromto.gif"))
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(bottom: 12.0),
+                child: Text("커피유야",
+                    style: TextStyle(fontSize: 15)),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 12.0),
+                child: Text("포항역",
+                    style: TextStyle(fontSize: 15)),
+              )
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
 }
 
 Widget RideSoon() {
   return Container(
-    child: Row(
+    child: Column(
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.all(15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Text(
-                '13:00',
-                style: TextStyle(fontSize: 19),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 14.0),
-                child: Image.asset(
-                  Icon("assets/images/Final-fourblue"),
-                  width: 40,
-                  height: 40,
-                ),
-              )
-            ],
+          padding: EdgeInsets.only(
+            top: 15,
+            left: 20,
+          ),
+          child: Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  '곧 탑승 예정',
+                  style: TextStyle(
+                      color: Colors.blueAccent,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
           ),
         ),
-        Column(
-          children: <Widget>[
-            Padding(
-                padding: EdgeInsets.all(15),
-                child: Image.asset("assets/image/Final-fromto.gif"))
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(bottom: 12.0),
-              child: Text(datas[index]["leave"],
-                  style: TextStyle(fontSize: 15)),
+        Container(
+          margin: EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            border: Border.all(width: 2.0, color: Colors.blueAccent),
+          ),
+          child: Container(
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Text(
+                        '13:00',
+                        style: TextStyle(fontSize: 19),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 14.0, top: 10.0),
+                        child: Image.asset(
+                          "assets/images/Final-fourblue.png",
+                          width: 40,
+                          height: 40,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Column(
+                  children: <Widget>[
+                    Padding(
+                        padding: EdgeInsets.all(15),
+                        child: Image.asset("assets/images/Final-fromto.gif"))
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 12.0),
+                      child: Text("커피유야", style: TextStyle(fontSize: 15)),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 12.0),
+                      child: Text("포항역", style: TextStyle(fontSize: 15)),
+                    )
+                  ],
+                ),
+              ],
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 12.0),
-              child: Text(datas[index]["arrive"],
-                  style: TextStyle(fontSize: 15)),
-            )
-          ],
+          ),
         ),
       ],
     ),
   );
 }
 
+Widget RideLog() {
+  var date = DateTime.now();
+  return Container(
+    child: Column(
+      children: <Widget>[
+        Row (
+            children: <Widget>[
+              Padding(padding: EdgeInsets.only(left: 15)),
+              Text('${date.month.toString()}월 ${date.day.toString()}일 ', style: TextStyle(color: Colors.black54, fontSize: 14)),
+              Text(DateFormat('EEEE').format(date).toString(), style: TextStyle(color: Colors.black54, fontSize: 14)),
+            ]
+        ),
+        listWidget(),
+        Divider(color: Colors.black26,),
 
+        Row (
+            children: <Widget>[
+              Padding(padding: EdgeInsets.only(left: 15)),
+              Text('${date.subtract(Duration(days: 1)).month.toString()}월 ${date.subtract(Duration(days: 1)).day.toString()}일 ', style: TextStyle(color: Colors.black54, fontSize: 14)),
+              Text(DateFormat('EEEE').format(date.subtract(Duration(days: 1))).toString(), style: TextStyle(color: Colors.black54, fontSize: 14)),
+            ]
+        ),
+        listWidget(),
+        Divider(color: Colors.black26,),
+      ]
+    ),
+  );
+}
 
 class _TimeLineState extends State<TimeLine> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            title: const Text(
-              '타임라인',
-              style: TextStyle(
-                color: Colors.black,
-              ),
+      home: Scaffold(
+        resizeToAvoidBottomPadding: false,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: const Text(
+            '타임라인',
+            style: TextStyle(
+              color: Colors.black,
             ),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(
-                  Icons.add_circle_outline,
-                  color: Colors.blue,
-                ),
-                onPressed: () {
-                  Navigator.push(context,
-                      CupertinoPageRoute(builder: (context) => PlusPage()));
-                },
-              )
-            ],
           ),
-          body: Container(
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.add_circle_outline,
+                color: Colors.blue,
+              ),
+              onPressed: () {
+                Navigator.push(context,
+                    CupertinoPageRoute(builder: (context) => PlusPage()));
+              },
+            )
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Container(
             child: Column(
               children: <Widget>[
-                Text('곧 탑승 예정'),
                 RideSoon(),
-              ],
-            )
-          ),
-          ),
-    );
-  }
-}
-
-class _RideLogState extends State<RideLog> {
-  List<Map<String, String>> datas = [];
-  @override
-  void initState() {
-    super.initState();
-    datas = [
-      {
-        "people": "assets/image/Final-oneblue.png",
-        "time": "13:00",
-        "leave": "한동대",
-        "arrive": "커피유야",
-      },
-      {
-        "people": "assets/image/Final-twoblue.png",
-        "time": "19:00",
-        "leave": "다이소",
-        "arrive": "포항역",
-      },
-      {
-        "people": "assets/image/Final-oneblue.png",
-        "time": "10:00",
-        "leave": "세차장",
-        "arrive": "한동대",
-      },
-      {
-        "people": "assets/image/Final-threeblue.png",
-        "time": "12:00",
-        "leave": "시외버스터미널",
-        "arrive": "커피유야",
-      },
-      {
-        "people": "assets/image/Final-fourblue.png",
-        "time": "20:00",
-        "leave": "한동대",
-        "arrive": "육거리",
-      },
-    ];
-  }
-
-  Widget listWidget() {
-    return ListView.separated(
-      itemBuilder: (BuildContext context, int index) {
-        return Container(
-          child: Row(
-            //mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    Text(
-                      datas[index]["time"],
-                      style: TextStyle(fontSize: 19),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 14.0),
-                      child: Image.asset(
-                        datas[index]["people"],
-                        width: 40,
-                        height: 40,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Column(
-                children: <Widget>[
-                  Padding(
-                      padding: EdgeInsets.all(15),
-                      child: Image.asset("assets/image/Final-fromto.gif"))
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 12.0),
-                    child: Text(datas[index]["leave"],
-                        style: TextStyle(fontSize: 15)),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: 15,
+                    left: 20,
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 12.0),
-                    child: Text(datas[index]["arrive"],
-                        style: TextStyle(fontSize: 15)),
-                  )
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-      separatorBuilder: (BuildContext context, int index) {
-        return Container(
-          height: 1,
-          color: Colors.black26,
-        );
-      },
-      itemCount: 5,
-    );
-  }
+                  child: Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          '탑승 내역',
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: Colors.black26,
+                  height: 20,
+                ),
 
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: <Widget>[
-
-          Divider(
-            color: Colors.black26,
-            height: 30,
+                RideLog(),
+              ],
+            ),
           ),
-          SizedBox(
-            height: 550.0,
-            child: listWidget(),
-          )
-        ],
+        ),
       ),
     );
   }
