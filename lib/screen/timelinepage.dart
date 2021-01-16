@@ -15,12 +15,13 @@ Widget listWidget() {
     margin: EdgeInsets.all(20),
     decoration: BoxDecoration(
         color: Colors.white,
-        border: Border.all(width: 1.0, color: Colors.black26),
+        border: Border.all(width: 0.5, color: Colors.black26),
+        borderRadius: BorderRadius.circular(8.0),
         boxShadow: [
           BoxShadow(
-              spreadRadius: 2,
-              blurRadius: 5,
-              color: Colors.black26
+              spreadRadius: 4,
+              blurRadius: 7,
+              color: Colors.black12
 
           ),
         ]

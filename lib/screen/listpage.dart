@@ -36,7 +36,7 @@ class CarList extends StatefulWidget {
 
 
   @override
-  _CarListState createState() => _CarListState();
+  _CarListState createState() => _CarListState(onNext);
 }
 
 class LeaveMenu extends StatefulWidget {
@@ -286,46 +286,32 @@ class _TaxiListState extends State<TaxiList> {
   Widget listWidget() {
     return ListView.separated(
       itemBuilder: (BuildContext context, int index) {
-<<<<<<< HEAD
-        return GestureDetector(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        PlusPage()));
-          },
-            child: Container(
-          child: Row(
-            //mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-=======
+
         return Container(
           // 주만: 카드형식으로 수정. (리스트 형식이랑 비교 후, 둘 중 하나로 통합)
           margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 7.0),
           decoration: BoxDecoration(
-            border: Border.all(width: 1.0, color: Colors.black26),
+            border: Border.all(width: 0.5, color: Colors.black26),
             borderRadius: BorderRadius.circular(8.0),
-            // color: Colors.white,
-            // boxShadow: [
-            //   BoxShadow(
-            //     blurRadius: 0.5,
-            //     offset: Offset(0.5, 0.5),
-            //   ),
-            // ],
+            //shadow 넣어도 채팅방 잘 들어가지는데...???
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                spreadRadius: 3,
+                blurRadius: 4,
+                color: Colors.black12,
+                offset: Offset(1.0, 3.0),
+              ),
+            ],
           ),
           child: InkWell(
             // 주만: tap 효과를 위해.
             onTap: () {
               // 하단 네비게이터 유지 x
-              onNext(ChatScreen());
+               onNext(ChatScreen());
 
               // 하단 네비게이터 유지 o
-              // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
+               //Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
             },
             child: Row(
               //mainAxisAlignment: MainAxisAlignment.center,
@@ -351,7 +337,6 @@ class _TaxiListState extends State<TaxiList> {
                   ),
                 ),
                 Column(
->>>>>>> main
                   children: <Widget>[
                     Padding(
                         padding: EdgeInsets.all(15),
@@ -376,7 +361,7 @@ class _TaxiListState extends State<TaxiList> {
               ],
             ),
           ),
-            ),);
+            );
       },
       separatorBuilder: (BuildContext context, int index) {
         return Container(
@@ -391,30 +376,9 @@ class _TaxiListState extends State<TaxiList> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-<<<<<<< HEAD
       resizeToAvoidBottomPadding: false,
       body: SingleChildScrollView(
         child: Column(
-          children: <Widget>[
-            Container(
-              margin: const EdgeInsets.all(10),
-              child: leaveArrive(),
-            ),
-            Container(
-              child: CalendarSection(),
-            ),
-            Divider(
-              color: Colors.black26,
-              height: 30,
-            ),
-            SizedBox(
-              height: 550.0,
-              child: listWidget(),
-            )
-          ],
-        ),
-=======
-      body: Column(
         children: <Widget>[
           Container(
             margin: const EdgeInsets.all(10),
@@ -429,19 +393,28 @@ class _TaxiListState extends State<TaxiList> {
           ),
           // 주만: 기존의 SizedBox + height: 550 으로 처리되었던 부분을
           // 다양한 크기의 스크린에서의 호환성을 위해 Flexible로 변경
-          Flexible(
+          SizedBox(
+            height: 550,
             child: listWidget(),
-          )
+            ),
+      //Flexible(child: listWidget()),
+
         ],
->>>>>>> main
+
       ),
-    );
+    ),);
   }
 }
 
 //carpool all
 class _CarListState extends State<CarList> {
+  final Function onNext;
+
+  _CarListState(this.onNext);
+
   List<Map<String, String>> datas = [];
+
+
   @override
   void initState() {
     super.initState();
@@ -482,15 +455,33 @@ class _CarListState extends State<CarList> {
   Widget listWidget() {
     return ListView.separated(
       itemBuilder: (BuildContext context, int index) {
-        return GestureDetector(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        PlusPage()));
-          },
-          child: Container(
+
+        return Container(
+          // 주만: 카드형식으로 수정. (리스트 형식이랑 비교 후, 둘 중 하나로 통합)
+          margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 7.0),
+          decoration: BoxDecoration(
+            border: Border.all(width: 0.5, color: Colors.black26),
+            borderRadius: BorderRadius.circular(8.0),
+            //shadow 넣어도 채팅방 잘 들어가지는데...???
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                spreadRadius: 3,
+                blurRadius: 4,
+                color: Colors.black12,
+                offset: Offset(1.0, 3.0),
+              ),
+            ],
+          ),
+          child: InkWell(
+            // 주만: tap 효과를 위해.
+            onTap: () {
+              // 하단 네비게이터 유지 x
+              onNext(ChatScreen());
+
+              // 하단 네비게이터 유지 o
+              //Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
+            },
             child: Row(
               //mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -538,12 +529,14 @@ class _CarListState extends State<CarList> {
                 ),
               ],
             ),
-          ),);
+          ),
+        );
       },
       separatorBuilder: (BuildContext context, int index) {
         return Container(
-          height: 1,
-          color: Colors.black26,
+          // 주만: 구분선 삭제
+          // height: 1,
+          // color: Colors.black26,
         );
       },
       itemCount: datas.length,
@@ -552,30 +545,33 @@ class _CarListState extends State<CarList> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomPadding: false,
       body: SingleChildScrollView(
         child: Column(
-        children: <Widget>[
-          Container(
-            margin: const EdgeInsets.all(10),
-            child: leaveArrive(),
-          ),
-          Container(
-            child: CalendarSection(),
-          ),
-          Divider(
-            color: Colors.black26,
-            height: 30,
-          ),
-          // 주만: 기존의 SizedBox + height: 550 으로 처리되었던 부분을
-          // 다양한 크기의 스크린에서의 호환성을 위해 Flexible로 변경
-          Flexible(
-            child: listWidget(),
-          )
-        ],
-      ),
-      ),
-    );
+          children: <Widget>[
+            Container(
+              margin: const EdgeInsets.all(10),
+              child: leaveArrive(),
+            ),
+            Container(
+              child: CalendarSection(),
+            ),
+            Divider(
+              color: Colors.black26,
+              height: 30,
+            ),
+            // 주만: 기존의 SizedBox + height: 550 으로 처리되었던 부분을
+            // 다양한 크기의 스크린에서의 호환성을 위해 Flexible로 변경
+            SizedBox(
+              height: 550,
+              child: listWidget(),
+            ),
+            //Flexible(child: listWidget()),
+
+          ],
+
+        ),
+      ),);
   }
 }
 

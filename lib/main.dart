@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:itaxi/mainScreen.dart';
@@ -37,6 +39,8 @@ class MyApp extends StatelessWidget{
         'SignUp': (context) => SignUp(),
         'MainScreen': (context) => MainScreen(),
         'ChatScreen': (context) => ChatScreen(),
+        //이거 넣어줘야 하나......??? @주만오빠
+        'RideLog' : (context) => TimeLine(),
       },
       home: SignIn(),
 
