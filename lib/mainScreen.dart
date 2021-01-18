@@ -160,7 +160,7 @@ class _MainScreenState extends State<MainScreen> {
 
           TimeLine(),
           TaxiCarList(onNext: _next,),
-          Settings(),
+          Settings(onNext: _next,),
         ].elementAt(index);
       },
     };
