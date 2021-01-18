@@ -53,6 +53,8 @@ class _MainScreenState extends State<MainScreen> {
 
     // Toast 띄우고 종료하기
     Future<bool> exitWithToast() {
+      final isFirstRouteInCurrentTab = _navigatorKeys[_selectedIndex].currentState.maybePop();
+
       if (backPressCounter < 1) {
         Fluttertoast.showToast(msg: "한번 더 누르면 종료됩니다.");
         backPressCounter++;
@@ -71,6 +73,17 @@ class _MainScreenState extends State<MainScreen> {
     return WillPopScope(
       onWillPop: exitWithToast,
       // onWillPop: exitWithDialog,
+
+      // onWillPop: () async {
+      //   final isFirstRouteInCurrentTab =
+      //   !await _navigatorKeys[_selectedIndex].currentState.maybePop();
+      //
+      //   // print(
+      //   //     'isFirstRouteInCurrentTab: ' + isFirstRouteInCurrentTab.toString());
+      //
+      //   // let system handle back button if we're on the first route
+      //   return isFirstRouteInCurrentTab;
+      // },
 
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -148,10 +161,6 @@ class _MainScreenState extends State<MainScreen> {
           TimeLine(),
           TaxiCarList(onNext: _next,),
           Settings(),
-          // CalendarPage(
-          //   onNext: _next,
-          // ),
-          // ProfilePage(),
         ].elementAt(index);
       },
     };

@@ -43,6 +43,9 @@ dependencies:
   # 플러터 토스트
   fluttertoast: ^4.0.1
 
+  # 전화 및 문자 보내기 바로가기
+  url_launcher: ^5.4.0
+
 
 
 
