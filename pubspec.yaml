@@ -46,6 +46,9 @@ dependencies:
   # 전화 및 문자 보내기 바로가기
   url_launcher: ^5.4.0
 
+  # pull to refresh (당겨서 새로고침)
+  pull_to_refresh: ^1.6.3
+
 
 
 

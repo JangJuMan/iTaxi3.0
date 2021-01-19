@@ -6,14 +6,15 @@ import 'package:itaxi/main.dart';
 import 'package:itaxi/themes.dart';       // 이거 임포트 경로가 다를 수 있음. 깃헙이름이 iTaxi 3.0이라서 내 로컬이랑 다를수도..
 
 import 'package:http/http.dart' as http;  // 네트워크 통신 테스트
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 // TODO: 제한된 개수로 채팅 불러오기
 // TODO: 이전 기록이 같은 사람이면 텍스트만 보이게하기
 // TODO: 이전 기록이 같은 시간이면 아래 시간만 보이게하기
-// TODO: 뒤로가기 버튼?
 
 // Widget > Component > Element
 
@@ -283,6 +284,40 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   // 스크롤 컨트롤러 객체
   ScrollController _scrollController = new ScrollController();
 
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
+
+  int numOfMsg = 10;
+  bool isEnablePullUp = true;
+
+  void _onRefresh() async {
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed, use refreshFailed()
+    _refreshController.refreshCompleted();
+  }
+
+  void _onLoading() async{
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+
+    if(mounted){
+      if(numOfMsg + 10 < _messages.length){
+        numOfMsg += 10;
+      }
+      else{
+        numOfMsg = _messages.length;
+        isEnablePullUp = false;
+      }
+      setState(() {
+        // numOfMsg += 10;
+      });
+    }
+
+    _refreshController.loadComplete();
+  }
+
 
 
   // 최초 1번만 데이터 로드할 때,
@@ -295,7 +330,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     // FOR DEBUG
     var nowTime = DateFormat('HH:mm').format(DateTime.now());
 
-    for(int i=0; i<5; i++) {
+    for(int i=0; i<10; i++) {
       // 메시지 리스트에 사용자가 보낸 메시지를 .insert(index, element)
       ChatMessage inputMessage = ChatMessage(
         content: "샘플메시지입니다." + i.toString(),
@@ -310,7 +345,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     }
 
     // FOR DEBUG
-    for(int i=5; i<7; i++) {
+    for(int i=10; i<20; i++) {
       // 메시지 리스트에 사용자가 보낸 메시지를 .insert(index, element)
       ChatMessage inputMessage = ChatMessage(
         content: "시스템 안내 메시지 입니다." + i.toString(),
@@ -325,7 +360,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     }
 
     // FOR DEBUG
-    for(int i=7; i<10; i++) {
+    for(int i=20; i<30; i++) {
       // 메시지 리스트에 사용자가 보낸 메시지를 .insert(index, element)
       ChatMessage inputMessage = ChatMessage(
         content: "내가보낸 메시지 입니다." + i.toString(),
@@ -340,7 +375,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     }
 
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -388,15 +422,61 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
           // 채팅기록
           Flexible(
-            child: ListView.builder(
-              controller: _scrollController,
-              padding: EdgeInsets.all(8.0),
-              reverse: true,
-              itemBuilder: (context, int index) => _messages[index],
-              itemCount: _messages.length,
+            child: SmartRefresher(
+              enablePullDown: false,
+              enablePullUp: isEnablePullUp,
+              header: WaterDropHeader(),
+              footer: ClassicFooter(),
+              // CustomFooter(
+              //   builder: (BuildContext context, LoadStatus mode){
+              //     Widget body;
+              //     if(mode==LoadStatus.idle){
+              //       body =  Text("불러오기에 실패하였습니다. 다시 시도해주세요.");
+              //     }
+              //     else if(mode==LoadStatus.loading){
+              //       body =  CupertinoActivityIndicator();
+              //     }
+              //     else if(mode == LoadStatus.failed){
+              //       body = Text("불러오기에 실패하였습니다. 다시 시도해주세요.");
+              //     }
+              //     else if(mode == LoadStatus.canLoading){
+              //       body = Text("위로 스크롤하여 이전 대화를 확인하세요.");
+              //     }
+              //     else{
+              //       body = Text("이전 데이터가 없습니다.");
+              //     }
+              //     return Container(
+              //       height: 1.0,
+              //       child: Center(child:body),
+              //     );
+              //   },
+              // ),
+              controller: _refreshController,
+              onRefresh: _onRefresh,
+              onLoading: _onLoading,
+              child: ListView.builder(
+                controller: _scrollController,
+                padding: EdgeInsets.all(8.0),
+                reverse: true,
+                itemBuilder: (context, int index) => _messages[index],
+                itemCount: numOfMsg,
+                // itemCount: _messages.length,
+              ),
             ),
-            // ChatList(),
           ),
+
+
+          // 채팅기록 (원본)
+          // Flexible(
+          //   child: ListView.builder(
+          //     controller: _scrollController,
+          //     padding: EdgeInsets.all(8.0),
+          //     reverse: true,
+          //     itemBuilder: (context, int index) => _messages[index],
+          //     itemCount: _messages.length,
+          //   ),
+          //   // ChatList(),
+          // ),
 
           // 디바이더
           Divider(height: 1.0),
