@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart'; // 테마
 import 'package:flutter/cupertino.dart';  // 플랫폼별 버튼
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';          // Datetime format
 import 'package:itaxi/main.dart';
 import 'package:itaxi/themes.dart';       // 이거 임포트 경로가 다를 수 있음. 깃헙이름이 iTaxi 3.0이라서 내 로컬이랑 다를수도..
@@ -40,172 +41,172 @@ class ChatRoomInfo {
   }
 }
 
-// Class: 채팅 내용
-class ChatMessage extends StatelessWidget {
-  final String content;
-  final String date_time;
-  final String user_name;
-  // final List<String> read;
-  final bool is_chat;
-
-  ChatMessage({this.content, this.date_time, this.user_name, /*this.read,*/ this.is_chat});
-
-  @override
-  Widget build(BuildContext context) {
-    if(is_chat){
-      if(user_name == _name){     // 내가 보낸 메시지
-        return _myChat(context);
-      }
-      else{       // 상대가 보낸 메시지
-        return _othersChat(context);
-      }
-    }
-    else{
-      return _systemChat(context);
-    }
-  }
-
-  // Widget: 내가 보낸 채팅
-  Widget _myChat(BuildContext context){
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  user_name,
-                  style: Theme.of(context).textTheme.headline6,             // subtitle1
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 5.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(left: 20.0),
-                        child: Text(date_time),
-                      ),
-                      Flexible(
-                        child:  Container(
-                          margin: EdgeInsets.only(left: 10.0),
-                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                          decoration: BoxDecoration(
-                            color: Colors.blueAccent,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(content, style: TextStyle(fontSize: 15, color: Colors.white)),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          Container(
-            margin: const EdgeInsets.only(left: 16.0),
-            child: CircleAvatar(child: Text(user_name[0] /*user_name.substring(0, 2)*/)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Widget: 상대가 보낸 채팅
-  Widget _othersChat(BuildContext context){
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(right: 16.0),
-            child: CircleAvatar(child: Text(user_name[0])),
-          ),
-          // 긴 Text 줄 바꿈
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  user_name,
-                  style: Theme.of(context).textTheme.headline6,             // subtitle1
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 5.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Flexible(
-                        child:  Container(
-                          margin: EdgeInsets.only(right: 10.0),
-                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                          decoration: BoxDecoration(
-                            border: Border.all(width: 0.3),
-                            color: Color.fromRGBO(0xFF, 0xFF, 0xFF, 1),
-                            // color: Color.fromRGBO(0x3F, 0xA9, 0xF5, 0.5),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-
-                          child: Text(content, style: TextStyle(fontSize: 15)),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(right: 20.0),
-                        child: Text(date_time, style: TextStyle(fontSize: 11)
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Widget: 시스템 메시지
-  Widget _systemChat(BuildContext context){
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  alignment: Alignment.center,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.black12,
-                  ),
-                  margin: EdgeInsets.symmetric(horizontal: 40.0, vertical: 3.0),
-                  padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
-                  child: Text(
-                      content,
-                      style: TextStyle(fontSize: 14,)
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+// // Class: 채팅 내용
+// class ChatMessage extends StatelessWidget {
+//   final String content;
+//   final String date_time;
+//   final String user_name;
+//   // final List<String> read;
+//   final bool is_chat;
+//
+//   ChatMessage({this.content, this.date_time, this.user_name, /*this.read,*/ this.is_chat});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     if(is_chat){
+//       if(user_name == _name){     // 내가 보낸 메시지
+//         return _myChat(context);
+//       }
+//       else{       // 상대가 보낸 메시지
+//         return _othersChat(context);
+//       }
+//     }
+//     else{
+//       return _systemChat(context);
+//     }
+//   }
+//
+//   // Widget: 내가 보낸 채팅
+//   Widget _myChat(BuildContext context){
+//     return Container(
+//       margin: EdgeInsets.symmetric(vertical: 10.0),
+//       child: Row(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         mainAxisAlignment: MainAxisAlignment.end,
+//         children: [
+//           Expanded(
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.end,
+//               children: [
+//                 Text(
+//                   user_name,
+//                   style: Theme.of(context).textTheme.headline6,             // subtitle1
+//                 ),
+//                 Container(
+//                   margin: EdgeInsets.only(top: 5.0),
+//                   child: Row(
+//                     crossAxisAlignment: CrossAxisAlignment.end,
+//                     mainAxisAlignment: MainAxisAlignment.end,
+//                     children: [
+//                       Container(
+//                         margin: EdgeInsets.only(left: 20.0),
+//                         child: Text(date_time),
+//                       ),
+//                       Flexible(
+//                         child:  Container(
+//                           margin: EdgeInsets.only(left: 10.0),
+//                           padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+//                           decoration: BoxDecoration(
+//                             color: Colors.blueAccent,
+//                             borderRadius: BorderRadius.circular(10),
+//                           ),
+//                           child: Text(content, style: TextStyle(fontSize: 15, color: Colors.white)),
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//
+//           Container(
+//             margin: const EdgeInsets.only(left: 16.0),
+//             child: CircleAvatar(child: Text(user_name[0] /*user_name.substring(0, 2)*/)),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+//
+//   // Widget: 상대가 보낸 채팅
+//   Widget _othersChat(BuildContext context){
+//     return Container(
+//       margin: EdgeInsets.symmetric(vertical: 10.0),
+//       child: Row(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           Container(
+//             margin: const EdgeInsets.only(right: 16.0),
+//             child: CircleAvatar(child: Text(user_name[0])),
+//           ),
+//           // 긴 Text 줄 바꿈
+//           Expanded(
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Text(
+//                   user_name,
+//                   style: Theme.of(context).textTheme.headline6,             // subtitle1
+//                 ),
+//                 Container(
+//                   margin: EdgeInsets.only(top: 5.0),
+//                   child: Row(
+//                     crossAxisAlignment: CrossAxisAlignment.end,
+//                     children: [
+//                       Flexible(
+//                         child:  Container(
+//                           margin: EdgeInsets.only(right: 10.0),
+//                           padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+//                           decoration: BoxDecoration(
+//                             border: Border.all(width: 0.3),
+//                             color: Color.fromRGBO(0xFF, 0xFF, 0xFF, 1),
+//                             // color: Color.fromRGBO(0x3F, 0xA9, 0xF5, 0.5),
+//                             borderRadius: BorderRadius.circular(10),
+//                           ),
+//
+//                           child: Text(content, style: TextStyle(fontSize: 15)),
+//                         ),
+//                       ),
+//                       Container(
+//                         margin: EdgeInsets.only(right: 20.0),
+//                         child: Text(date_time, style: TextStyle(fontSize: 11)
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+//
+//   // Widget: 시스템 메시지
+//   Widget _systemChat(BuildContext context){
+//     return Container(
+//       margin: EdgeInsets.symmetric(vertical: 10.0),
+//       child: Row(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           Expanded(
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.center,
+//               children: [
+//                 Container(
+//                   alignment: Alignment.center,
+//                   width: double.infinity,
+//                   decoration: BoxDecoration(
+//                     borderRadius: BorderRadius.circular(15),
+//                     color: Colors.black12,
+//                   ),
+//                   margin: EdgeInsets.symmetric(horizontal: 40.0, vertical: 3.0),
+//                   padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
+//                   child: Text(
+//                       content,
+//                       style: TextStyle(fontSize: 14,)
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 
 // Method: 채팅방 정보 받아오기.
@@ -257,6 +258,15 @@ class _ChatScreenState extends State<ChatScreen> {
   int numOfMsg = 0;
   bool isEnablePullUp = true;
 
+  // 정산하기 관련
+  TextEditingController dutchPriceController = TextEditingController();
+  TextEditingController dutchPeopleController = TextEditingController();
+  var _ducthpayFormKey = GlobalKey<FormState>();
+  // int numOfPeople = 1;
+  String numOfPeople = '1';
+  int currPerson = 1;
+  int totalPrice = 0;
+
   void _onRefresh() async {
     // monitor network fetch
     await Future.delayed(Duration(milliseconds: 1000));
@@ -301,6 +311,9 @@ class _ChatScreenState extends State<ChatScreen> {
     else{
       numOfMsg = 10;
     }
+
+    // TODO: 방 안의 사람숫자 DB에서 불러와서 업데이트
+    numOfPeople = '3';
 
   }
 
@@ -515,13 +528,17 @@ class _ChatScreenState extends State<ChatScreen> {
                 Theme.of(context).platform == TargetPlatform.iOS
                     ? CupertinoButton(
                       child: Text(
-                        '정산하기',
+                        '더치페이',
                         style: TextStyle(color: Colors.indigoAccent, fontWeight: FontWeight.w600),
                       ),
-                      onPressed: () => {},
+                      onPressed: () => {
+                        createDutchAlertDialog(context).then((onValue){
+                          _doDutchPay();
+                        })
+                      },
                     )
                     : RaisedButton(
-                      child: Text('정산하기', style: TextStyle(color: Colors.white)),
+                      child: Text('더치페이', style: TextStyle(color: Colors.white)),
                       color: Colors.indigoAccent,
                       onPressed: () => {},
                     ),
@@ -531,6 +548,107 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
       )
     );
+  }
+
+  _doDutchPay(){
+    // 입력된 금액으로 정산해서 시스템 메시지로 전송
+
+    // 메시지 리스트에 사용자가 보낸 메시지를 .insert(index, element)
+    var nowTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+
+    String account = '기업 01041548299';
+    double dutchPrice = totalPrice / currPerson;
+    int resultPrcie = dutchPrice.round();
+
+    String text = '$account (으)로 $resultPrcie 원 입금 부탁드립니다.';
+
+    Message inputMessage = Message(
+      content: text,
+      date_time: nowTime,
+      user_name: _name,
+      // user_name: '시스템',
+      is_chat: false,
+    );
+
+    setState(() {
+      sampleMessages.insert(0, inputMessage);
+    });
+  }
+
+  Future<String> createDutchAlertDialog(BuildContext context){
+    return showDialog(context: context, builder: (context){
+      return AlertDialog(
+        title: Text('더치페이', style: TextStyle(/*fontSize: 22,*/ color: Colors.blue, fontWeight: FontWeight.w700)),
+        content: Form(
+          key: _ducthpayFormKey,
+          child: SizedBox(
+            height: 200,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                TextFormField(
+                  controller: dutchPriceController,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  ],
+                  decoration: InputDecoration(
+                    hintText: '결제한 총 금액을 입력하세요',
+                    labelText: '결제한 금액',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return '결제된 금액을 입력해주세요';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  controller: dutchPeopleController,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  ],
+                  // initialValue: numOfPeople.toString(
+                  decoration: InputDecoration(
+                    hintText: '합승한 인원 수를 입력하세요',
+                    labelText: '합승한 인원',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return '탑승한 인원을 입력해주세요';
+                    }
+                    return null;
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        actions: [
+          MaterialButton(
+            elevation: 5.0,
+            child: Text('정산하기', style: TextStyle(fontSize: 15, color: Colors.blueAccent)),
+            onPressed: () {
+              if (_ducthpayFormKey.currentState.validate()){
+                setState(() {
+                  totalPrice = int.parse(dutchPriceController.text);
+                  currPerson = int.parse(dutchPeopleController.text);
+                });
+                Navigator.of(context).pop();
+              }
+            },
+          ),
+        ],
+      );
+    });
   }
 
 
