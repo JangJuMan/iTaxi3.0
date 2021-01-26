@@ -305,7 +305,7 @@ class _TaxiListState extends State<TaxiList> {
           // 주만: 카드형식으로 수정. (리스트 형식이랑 비교 후, 둘 중 하나로 통합)
           margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 7.0),
           decoration: BoxDecoration(
-            border: Border.all(width: 1.0, color: Colors.black26),
+            // border: Border.all(width: 1.0, color: Colors.black26),
             borderRadius: BorderRadius.circular(8.0),
             color: Colors.white,
             boxShadow: [
@@ -466,7 +466,7 @@ class _CarListState extends State<CarList> {
           // 주만: 카드형식으로 수정. (리스트 형식이랑 비교 후, 둘 중 하나로 통합)
           margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 7.0),
           decoration: BoxDecoration(
-            border: Border.all(width: 1.0, color: Colors.black26),
+            // border: Border.all(width: 1.0, color: Colors.black26),
             borderRadius: BorderRadius.circular(8.0),
             color: Colors.white,
             boxShadow: [
