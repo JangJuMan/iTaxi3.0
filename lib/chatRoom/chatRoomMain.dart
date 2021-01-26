@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart'; // 테마
 import 'package:flutter/cupertino.dart';  // 플랫폼별 버튼
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';          // Datetime format
 import 'package:itaxi/main.dart';
 import 'package:itaxi/themes.dart';       // 이거 임포트 경로가 다를 수 있음. 깃헙이름이 iTaxi 3.0이라서 내 로컬이랑 다를수도..
@@ -40,173 +41,6 @@ class ChatRoomInfo {
     );
   }
 }
-
-// // Class: 채팅 내용
-// class ChatMessage extends StatelessWidget {
-//   final String content;
-//   final String date_time;
-//   final String user_name;
-//   // final List<String> read;
-//   final bool is_chat;
-//
-//   ChatMessage({this.content, this.date_time, this.user_name, /*this.read,*/ this.is_chat});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     if(is_chat){
-//       if(user_name == _name){     // 내가 보낸 메시지
-//         return _myChat(context);
-//       }
-//       else{       // 상대가 보낸 메시지
-//         return _othersChat(context);
-//       }
-//     }
-//     else{
-//       return _systemChat(context);
-//     }
-//   }
-//
-//   // Widget: 내가 보낸 채팅
-//   Widget _myChat(BuildContext context){
-//     return Container(
-//       margin: EdgeInsets.symmetric(vertical: 10.0),
-//       child: Row(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         mainAxisAlignment: MainAxisAlignment.end,
-//         children: [
-//           Expanded(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.end,
-//               children: [
-//                 Text(
-//                   user_name,
-//                   style: Theme.of(context).textTheme.headline6,             // subtitle1
-//                 ),
-//                 Container(
-//                   margin: EdgeInsets.only(top: 5.0),
-//                   child: Row(
-//                     crossAxisAlignment: CrossAxisAlignment.end,
-//                     mainAxisAlignment: MainAxisAlignment.end,
-//                     children: [
-//                       Container(
-//                         margin: EdgeInsets.only(left: 20.0),
-//                         child: Text(date_time),
-//                       ),
-//                       Flexible(
-//                         child:  Container(
-//                           margin: EdgeInsets.only(left: 10.0),
-//                           padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-//                           decoration: BoxDecoration(
-//                             color: Colors.blueAccent,
-//                             borderRadius: BorderRadius.circular(10),
-//                           ),
-//                           child: Text(content, style: TextStyle(fontSize: 15, color: Colors.white)),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//
-//           Container(
-//             margin: const EdgeInsets.only(left: 16.0),
-//             child: CircleAvatar(child: Text(user_name[0] /*user_name.substring(0, 2)*/)),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   // Widget: 상대가 보낸 채팅
-//   Widget _othersChat(BuildContext context){
-//     return Container(
-//       margin: EdgeInsets.symmetric(vertical: 10.0),
-//       child: Row(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Container(
-//             margin: const EdgeInsets.only(right: 16.0),
-//             child: CircleAvatar(child: Text(user_name[0])),
-//           ),
-//           // 긴 Text 줄 바꿈
-//           Expanded(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Text(
-//                   user_name,
-//                   style: Theme.of(context).textTheme.headline6,             // subtitle1
-//                 ),
-//                 Container(
-//                   margin: EdgeInsets.only(top: 5.0),
-//                   child: Row(
-//                     crossAxisAlignment: CrossAxisAlignment.end,
-//                     children: [
-//                       Flexible(
-//                         child:  Container(
-//                           margin: EdgeInsets.only(right: 10.0),
-//                           padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-//                           decoration: BoxDecoration(
-//                             border: Border.all(width: 0.3),
-//                             color: Color.fromRGBO(0xFF, 0xFF, 0xFF, 1),
-//                             // color: Color.fromRGBO(0x3F, 0xA9, 0xF5, 0.5),
-//                             borderRadius: BorderRadius.circular(10),
-//                           ),
-//
-//                           child: Text(content, style: TextStyle(fontSize: 15)),
-//                         ),
-//                       ),
-//                       Container(
-//                         margin: EdgeInsets.only(right: 20.0),
-//                         child: Text(date_time, style: TextStyle(fontSize: 11)
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   // Widget: 시스템 메시지
-//   Widget _systemChat(BuildContext context){
-//     return Container(
-//       margin: EdgeInsets.symmetric(vertical: 10.0),
-//       child: Row(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Expanded(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.center,
-//               children: [
-//                 Container(
-//                   alignment: Alignment.center,
-//                   width: double.infinity,
-//                   decoration: BoxDecoration(
-//                     borderRadius: BorderRadius.circular(15),
-//                     color: Colors.black12,
-//                   ),
-//                   margin: EdgeInsets.symmetric(horizontal: 40.0, vertical: 3.0),
-//                   padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
-//                   child: Text(
-//                       content,
-//                       style: TextStyle(fontSize: 14,)
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
 
 
 // Method: 채팅방 정보 받아오기.
@@ -281,6 +115,7 @@ class _ChatScreenState extends State<ChatScreen> {
     // if failed,use loadFailed(),if no data return,use LoadNodata()
 
     if(mounted){
+      // TODO: 한.. 20? 30? 이 적당하지 않을까? 지금은 보여주기 위해서 10개로 해놓음.
       if(numOfMsg + 10 < sampleMessages.length){
         numOfMsg += 10;
       }
@@ -327,13 +162,14 @@ class _ChatScreenState extends State<ChatScreen> {
         elevation: 0.0,
         // elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
         centerTitle: true,
-        title: Text(roomTitle, ),
+        title: Text(roomTitle, style: TextStyle(fontSize: 18)),
         // leading: IconButton(
-        //     icon: Icon(Icons.arrow_back_ios),
-        //     color: Colors.white,
-        //     onPressed: () {
-        //       Navigator.pop(context);
-        //     }),
+        //   icon: Icon(Icons.arrow_back_ios),
+        //   color: Colors.black,
+        //   onPressed: () {
+        //     Navigator.pop(context);
+        //   }
+        // ),
       ),
       body: Center(
         child: FutureBuilder<ChatRoomInfo>(
@@ -460,14 +296,14 @@ class _ChatScreenState extends State<ChatScreen> {
   // ignore: non_constant_identifier_names
   Container _cmp_roomInfo({String departure_place, String arrival_place, String departure_date, String depature_time}){
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 7.0, horizontal: 7.0),
-
-      decoration: BoxDecoration(
-        border: Border(
-          // bottom: BorderSide(width: 1.0, color: Colors.black26),
-        ),
-        color: Color.fromRGBO(0xF5, 0xF5, 0xF5, 1),
-      ),
+      padding: EdgeInsets.all(1.0),
+      // decoration: BoxDecoration(
+      //   border: Border(
+      //     // bottom: BorderSide(width: 1.0, color: Colors.black26),
+      //   ),
+      //   // color: Colors.white,
+      //   // color: Color.fromRGBO(0xF5, 0xF5, 0xF5, 1),
+      // ),
 
       child: Row(
         children: [
@@ -479,7 +315,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   margin: EdgeInsets.all(2.0),
                   child: Row(
                     children: [
-                      Text(departure_place, style: TextStyle(fontSize: 20)),
+                      Text(departure_place, style: TextStyle(fontSize: 16)),
                     ],
                   ),
                 ),
@@ -490,7 +326,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Icon(Icons.arrow_forward),
-                      Text(" "+arrival_place, style: TextStyle(fontSize: 20)),
+                      Text(" "+arrival_place, style: TextStyle(fontSize: 16)),
                     ],
                   ),
                 ),
@@ -499,8 +335,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   margin: EdgeInsets.all(2.0),
                   child: Row(
                     children: [
-                      Icon(Icons.departure_board, size: 20),
-                      Text(" "+departure_date+"  "+depature_time, style: TextStyle(fontSize: 20)),
+                      Icon(Icons.departure_board, size: 16),
+                      Text(" "+departure_date+"  "+depature_time, style: TextStyle(fontSize: 16)),
                     ],
                   ),
                 ),
@@ -511,37 +347,61 @@ class _ChatScreenState extends State<ChatScreen> {
             margin: EdgeInsets.only(left: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 10.0),
             child: Column(
               children: [
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? CupertinoButton(
-                      child: Text(
-                        '방 나가기',
-                        style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.w600),
-                      ),
-                      onPressed: () => {},
-                    )
-                    : RaisedButton(
-                      child: Text('방 나가기', style: TextStyle(color: Colors.white)),
-                      color: Colors.redAccent,
-                      onPressed: () => {},
+                CupertinoButton(
+                  child: Text(
+                    '방 나가기',
+                    style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.w600, fontSize: 16),
+                  ),
+                  onPressed: () => {},
+                ),
+                CupertinoButton(
+                    child: Text(
+                      '더치페이',
+                      style: TextStyle(color: Colors.indigoAccent, fontWeight: FontWeight.w600, fontSize: 16),
                     ),
-                // TODO: 방장한테만 보이기, (상관없나?)
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? CupertinoButton(
-                      child: Text(
-                        '더치페이',
-                        style: TextStyle(color: Colors.indigoAccent, fontWeight: FontWeight.w600),
-                      ),
-                      onPressed: () => {
-                        createDutchAlertDialog(context).then((onValue){
-                          _doDutchPay();
-                        })
-                      },
-                    )
-                    : RaisedButton(
-                      child: Text('더치페이', style: TextStyle(color: Colors.white)),
-                      color: Colors.indigoAccent,
-                      onPressed: () => {},
-                    ),
+                    onPressed: () => {
+                      createDutchAlertDialog(context).then((onValue){
+                      // _doDutchPay();
+                      })
+                    },
+                ),
+
+                // // 테마별 적용..?
+                // Theme.of(context).platform != TargetPlatform.iOS
+                //     ? CupertinoButton(
+                //       child: Text(
+                //         '방 나가기',
+                //         style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.w600, fontSize: 16),
+                //       ),
+                //       onPressed: () => {},
+                //     )
+                //     : RaisedButton(
+                //       child: Text('방 나가기', style: TextStyle(color: Colors.white)),
+                //       color: Colors.redAccent,
+                //       onPressed: () => {},
+                //     ),
+                // // TODO: 방장한테만 보이기, (상관없나?)
+                // Theme.of(context).platform != TargetPlatform.iOS
+                //     ? CupertinoButton(
+                //       child: Text(
+                //         '더치페이',
+                //         style: TextStyle(color: Colors.indigoAccent, fontWeight: FontWeight.w600, fontSize: 16),
+                //       ),
+                //       onPressed: () => {
+                //         createDutchAlertDialog(context).then((onValue){
+                //           _doDutchPay();
+                //         })
+                //       },
+                //     )
+                //     : RaisedButton(
+                //       child: Text('더치페이', style: TextStyle(color: Colors.white)),
+                //       color: Colors.indigoAccent,
+                //       onPressed: () => {
+                //         createDutchAlertDialog(context).then((onValue){
+                //           _doDutchPay();
+                //         })
+                //       },
+                //     ),
               ],
             ),
           ),
@@ -560,7 +420,7 @@ class _ChatScreenState extends State<ChatScreen> {
     double dutchPrice = totalPrice / currPerson;
     int resultPrcie = dutchPrice.round();
 
-    String text = '$account (으)로 $resultPrcie 원 입금 부탁드립니다.';
+    String text = '$account 로 $resultPrcie 원 입금 부탁드립니다.';
 
     Message inputMessage = Message(
       content: text,
@@ -572,7 +432,16 @@ class _ChatScreenState extends State<ChatScreen> {
 
     setState(() {
       sampleMessages.insert(0, inputMessage);
+      numOfMsg++;
+      // isEnablePullUp = true;
     });
+
+    // 맨 아래로 스크롤
+    _scrollController.animateTo(
+      0.0,
+      curve: Curves.easeOut,
+      duration: const Duration(milliseconds: 300),
+    );
   }
 
   Future<String> createDutchAlertDialog(BuildContext context){
@@ -587,6 +456,10 @@ class _ChatScreenState extends State<ChatScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
+                Text(' 결제된 금액을 탑승한 인원수로 나누고,\n소수 첫째 자리에서 반올림한 값입니다.', style: TextStyle(fontSize: 13, color: Colors.black54),),
+                SizedBox(
+                  height: 20,
+                ),
                 TextFormField(
                   controller: dutchPriceController,
                   keyboardType: TextInputType.number,
@@ -643,6 +516,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   currPerson = int.parse(dutchPeopleController.text);
                 });
                 Navigator.of(context).pop();
+                _doDutchPay();
               }
             },
           ),
@@ -664,7 +538,7 @@ class _ChatScreenState extends State<ChatScreen> {
         color: Colors.black12,
       ),
       // 컨테이너의 높이를 설정
-      height: 55.0,
+      height: 50.0,
       // 리스트뷰 추가
       child: ListView(
         // 스크롤 방향 설정. 수평적으로 스크롤되도록 설정
@@ -686,7 +560,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Container _elem_participantUnit(name, btnNumber, bool isVisible, String _phone){
     return Container(
       margin: EdgeInsets.symmetric(vertical: 2.0, horizontal: 3.0),
-      padding: EdgeInsets.symmetric(horizontal: 4.0),
+      padding: EdgeInsets.symmetric(horizontal: 3.0),
       decoration: BoxDecoration(
         border: Border.all(width: 1.0, color: Colors.cyan),
         borderRadius: BorderRadius.circular(30.0),
@@ -695,14 +569,14 @@ class _ChatScreenState extends State<ChatScreen> {
       child: Row(
         children: [
           IconButton(
-            iconSize: 60,
+            iconSize: 55,
             icon: Container(
-              padding: EdgeInsets.all(5.0),
-              decoration: BoxDecoration(
-                // border: Border.all(width: 1.0),
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: Text(name, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+              // padding: EdgeInsets.all(5.0),
+              // decoration: BoxDecoration(
+              //   border: Border.all(width: 1.0),
+              //   borderRadius: BorderRadius.circular(15.0),
+              // ),
+              child: Text(name, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
             ),
             onPressed: () {
               setState(() {
@@ -724,8 +598,7 @@ class _ChatScreenState extends State<ChatScreen> {
           Visibility(
             visible: isVisible,
             child: IconButton(
-                icon: Icon(Icons.call, size: 20),
-                // TODO: 전화연결
+                icon: Icon(Icons.call, size: 16),
                 onPressed: () => setState(() {
                   _launched = _makePhoneCall('tel:$_phone');
                 }),
@@ -734,8 +607,7 @@ class _ChatScreenState extends State<ChatScreen> {
           Visibility(
             visible: isVisible,
             child: IconButton(
-                icon: Icon(Icons.message, size: 20),
-                // TODO: 문자 보내기
+                icon: Icon(Icons.message, size: 16),
               onPressed: () => setState(() {
                 _launched = _makePhoneCall('sms:$_phone');
               }),
@@ -928,22 +800,39 @@ class _ChatScreenState extends State<ChatScreen> {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
                     alignment: Alignment.center,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.black12,
+                    // width: double.infinity,
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.80,
                     ),
-                    margin: EdgeInsets.symmetric(horizontal: 40.0, vertical: 3.0),
+                    margin: EdgeInsets.symmetric(horizontal: 0.0, vertical: 3.0),
                     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
-                    child: Text(
-                        message.content,
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.black54,
-                        )
+                    decoration: BoxDecoration(
+                      color: Colors.white30,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                        ),
+                      ],
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        Clipboard.setData(ClipboardData(text: message.content));
+                        Fluttertoast.showToast(msg: "클립보드에 복사되었습니다.");
+                      },
+                      child: Text(
+                          message.content,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black54,
+                          )
+                      ),
                     ),
                   ),
                 ],
@@ -1016,6 +905,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
     setState(() {
       sampleMessages.insert(0, inputMessage);
+      numOfMsg++;
+      // isEnablePullUp = true;
       // _messages.insert(0, inputMessage);
     });
 

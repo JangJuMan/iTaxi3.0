@@ -17,8 +17,11 @@ final ThemeData kIOSTheme = ThemeData(
 // Android 테마
 final ThemeData kDefaultTheme = ThemeData(
   // 주황색 엑센트가 있는 보라
-  primarySwatch: Colors.purple,
-  accentColor: Colors.orangeAccent[400],
+  // primarySwatch: Colors.purple,
+  // accentColor: Colors.orangeAccent[400],
+  primarySwatch: Colors.blue,
+  primaryColor: Colors.blueAccent[100],
+  primaryColorBrightness: Brightness.light,
 );
 
 // 색깔 상수
