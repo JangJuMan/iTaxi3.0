@@ -142,7 +142,6 @@ Row leaveArrive() {
       Column(
         children: <Widget>[
           LeaveMenu(),
-
         ],
       ),
       Column(
@@ -161,9 +160,12 @@ Row leaveArrive() {
       ),
       Column(
         children: <Widget>[
-          Icon(
-            Icons.youtube_searched_for,
-            color: Colors.blueAccent,
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.youtube_searched_for,
+              color: Colors.blueAccent,
+            ),
           ),
         ],
       ),
@@ -182,10 +184,12 @@ class _CalendarState extends State<CalendarSection> {
       children: <Widget>[
         Column(
           children: <Widget>[
-            Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black26,
-              size: 20,
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.black26,
+                size: 20,),
             ),
           ],
         ),
@@ -216,14 +220,18 @@ class _CalendarState extends State<CalendarSection> {
           //text
           //text
         ),
-
-
         Column(
           children: <Widget>[
-            Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.black26,
-              size: 20,
+            IconButton(
+              onPressed: () {
+                setState(() {
+
+                });
+              },
+              icon: Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.black26,
+                size: 20,),
             ),
           ],
         ),

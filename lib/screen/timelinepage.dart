@@ -191,6 +191,8 @@ Widget RideLog() {
   );
 }
 
+bool taxiPressed = true;
+bool carPressed = false;
 class _TimeLineState extends State<TimeLine> {
   @override
   Widget build(BuildContext context) {
@@ -225,27 +227,63 @@ class _TimeLineState extends State<TimeLine> {
                 RideSoon(),
                 Padding(
                   padding: EdgeInsets.only(
-                    top: 15,
-                    left: 20,
+                    top: 15.0,
+                    left: 20.0,
                   ),
-                  child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          '탑승 내역',
-                          style: TextStyle(
-                              color: Colors.black54,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
+
+                    child: Container(
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            '탑승 내역',
+                            style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(right: 100.0, left: 100.0),
+                          ),
+                          Expanded(
+                            child:
+                              Container(
+                                child:
+                                  TextButton(
+
+                                    child: Text('택시', style: TextStyle(color: taxiPressed? Colors.blueAccent : Colors.black54),),
+                                    onPressed: () {
+                                      setState(() {
+                                        taxiPressed = !taxiPressed;
+                                        carPressed = !carPressed;
+                                      });
+                                    },
+                                  ),
+                              ),
+                          ),
+                          Expanded(
+                            child:
+                              Container(
+                                child:
+                                TextButton(
+                                  child: Text('카풀', style: TextStyle(color: carPressed? Colors.blueAccent : Colors.black54),),
+                                  onPressed: () {
+                                    setState(() {
+                                      taxiPressed = !taxiPressed;
+                                      carPressed = !carPressed;
+                                    });
+                                  },
+                                ),
+                              ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+
+
                 ),
                 Divider(
                   color: Colors.black26,
-                  height: 20,
+                  height: 15.0,
                 ),
 
                 RideLog(),
