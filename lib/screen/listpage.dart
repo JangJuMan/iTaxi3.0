@@ -63,15 +63,15 @@ class CalendarSection extends StatefulWidget {
   _CalendarState createState() => _CalendarState();
 }
 
-// List<String> places = [
-//   "한동대",
-//   "커피유야",
-//   "다이소",
-//   "세차장",
-//   "포항역",
-//   "시외버스터미널",
-//   "E1"
-// ];
+List<String> places = [
+  "한동대",
+  "커피유야",
+  "다이소",
+  "세차장",
+  "포항역",
+  "시외버스터미널",
+  "E1"
+];
 
 
 //Leave dropdown menu
@@ -94,7 +94,7 @@ class _LeaveMenuState extends State<LeaveMenu> {
           dropdownValue = newValue;
         });
       },
-      items: <String>['한동대', '커피유야', '다이소', '세차장', '포항역', '직접입력']
+      items: places
           .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
@@ -123,7 +123,7 @@ class _ArriveMenuState extends State<ArriveMenu> {
           dropdownValue = newValue;
         });
       },
-      items: <String>['한동대', '커피유야', '다이소', '세차장', '포항역', '직접입력']
+      items: places
           .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
