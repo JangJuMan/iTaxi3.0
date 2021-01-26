@@ -158,15 +158,20 @@ Widget RideSoon() {
 }
 
 Widget RideLog() {
-  var date = DateTime.now();
+  DateTime now =  DateTime.now();
+  DateTime before = now.subtract(Duration(days: 1));
+  var day = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'];
+  var when = now.weekday;
+
+
   return Container(
     child: Column(
       children: <Widget>[
         Row (
             children: <Widget>[
               Padding(padding: EdgeInsets.only(left: 15)),
-              Text('${date.month.toString()}월 ${date.day.toString()}일 ', style: TextStyle(color: Colors.black54, fontSize: 14)),
-              Text(DateFormat('EEEE').format(date).toString(), style: TextStyle(color: Colors.black54, fontSize: 14)),
+              Text('${now.month.toString()}월 ${now.day.toString()}일 ', style: TextStyle(color: Colors.black54, fontSize: 14)),
+              Text(day[when-1], style: TextStyle(color: Colors.black54, fontSize: 14)),
             ]
         ),
         listWidget(),
@@ -175,8 +180,8 @@ Widget RideLog() {
         Row (
             children: <Widget>[
               Padding(padding: EdgeInsets.only(left: 15)),
-              Text('${date.subtract(Duration(days: 1)).month.toString()}월 ${date.subtract(Duration(days: 1)).day.toString()}일 ', style: TextStyle(color: Colors.black54, fontSize: 14)),
-              Text(DateFormat('EEEE').format(date.subtract(Duration(days: 1))).toString(), style: TextStyle(color: Colors.black54, fontSize: 14)),
+              Text('${now.subtract(Duration(days: 1)).month.toString()}월 ${now.subtract(Duration(days: 1)).day.toString()}일 ', style: TextStyle(color: Colors.black54, fontSize: 14)),
+              Text(day[before.weekday-1], style: TextStyle(color: Colors.black54, fontSize: 14)),
             ]
         ),
         listWidget(),
