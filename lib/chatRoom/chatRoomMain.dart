@@ -8,6 +8,7 @@ import 'package:itaxi/themes.dart';       // 이거 임포트 경로가 다를 �
 import 'package:http/http.dart' as http;  // 네트워크 통신 테스트
 import 'dart:async';
 import 'dart:convert';
+import 'package:url_launcher/url_launcher.dart';
 
 // TODO: 제한된 개수로 채팅 불러오기
 // TODO: 이전 기록이 같은 사람이면 텍스트만 보이게하기
@@ -262,6 +263,7 @@ class ChatScreen extends StatefulWidget{
 class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   String roomTitle = "채팅방 제목 placeholder";
   Future<ChatRoomInfo> futureChatRoomInfo;
+  Future<void> _launched;
 
   // 텍스트 컨트롤러 객체
   final _textController = TextEditingController();
@@ -445,7 +447,6 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   // Component: 방정보
   // ignore: non_constant_identifier_names
   Container _cmp_roomInfo({String departure_place, String arrival_place, String departure_date, String depature_time}){
-
     return Container(
       padding: EdgeInsets.symmetric(vertical: 7.0, horizontal: 7.0),
 
@@ -554,10 +555,10 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         // 컨테이너들을 ListView의 자식들로 추가
         children: [
           // TODO: 반복문... 안써도 되나?
-          _elem_participantUnit('장주만', 1, _isVisible01),
-          _elem_participantUnit('홍길참', 2, _isVisible02),
-          _elem_participantUnit('김참길', 3, _isVisible03),
-          _elem_participantUnit('고베어', 4, _isVisible04),
+          _elem_participantUnit('장주만', 1, _isVisible01, '01041578299'),
+          _elem_participantUnit('홍길참', 2, _isVisible02, '01012341234'),
+          _elem_participantUnit('김참길', 3, _isVisible03, '01023452345'),
+          _elem_participantUnit('고베어', 4, _isVisible04, '01034564567'),
         ],
       ),
     );
@@ -565,7 +566,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   // Element: 참가자 정보 유닛
   // ignore: non_constant_identifier_names
-  Container _elem_participantUnit(name, btnNumber, bool isVisible){
+  Container _elem_participantUnit(name, btnNumber, bool isVisible, String _phone){
     return Container(
       margin: EdgeInsets.symmetric(vertical: 2.0, horizontal: 3.0),
       padding: EdgeInsets.symmetric(horizontal: 4.0),
@@ -608,7 +609,9 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             child: IconButton(
                 icon: Icon(Icons.call, size: 20),
                 // TODO: 전화연결
-                onPressed: () => {}
+                onPressed: () => setState(() {
+                  _launched = _makePhoneCall('tel:$_phone');
+                }),
             ),
           ),
           Visibility(
@@ -616,13 +619,24 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             child: IconButton(
                 icon: Icon(Icons.message, size: 20),
                 // TODO: 문자 보내기
-                onPressed: () => {}
+              onPressed: () => setState(() {
+                _launched = _makePhoneCall('sms:$_phone');
+              }),
             ),
           ),
         ],
       ),
     );
   }
+
+  Future<void> _makePhoneCall(String url) async {
+    if(await canLaunch(url)){
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
 
 
 

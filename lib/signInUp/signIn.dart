@@ -182,6 +182,9 @@ class _SignInState extends State<SignIn> {
 
 
                                         Navigator.of(context).push(FadeInOutPageRoute(MainScreen()));
+
+                                        // 스택에서 가장 처음인 signIn 을 빼고 MainScreen으로 이동하겠다.
+                                        // Navigator.of(context).pushNamedAndRemoveUntil('MainScreen', (Route<dynamic> route) => false);
                                       }
                                       // _signIn();
                                     },
