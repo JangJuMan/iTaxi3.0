@@ -63,6 +63,17 @@ class CalendarSection extends StatefulWidget {
   _CalendarState createState() => _CalendarState();
 }
 
+List<String> places = [
+  "한동대",
+  "커피유야",
+  "다이소",
+  "세차장",
+  "포항역",
+  "시외버스터미널",
+  "E1"
+];
+
+
 //Leave dropdown menu
 class _LeaveMenuState extends State<LeaveMenu> {
   String dropdownValue = null;
@@ -83,7 +94,7 @@ class _LeaveMenuState extends State<LeaveMenu> {
           dropdownValue = newValue;
         });
       },
-      items: <String>['한동대', '커피유야', '다이소', '세차장', '포항역', '직접입력']
+      items: places
           .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
@@ -112,7 +123,7 @@ class _ArriveMenuState extends State<ArriveMenu> {
           dropdownValue = newValue;
         });
       },
-      items: <String>['한동대', '커피유야', '다이소', '세차장', '포항역', '직접입력']
+      items: places
           .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
@@ -149,9 +160,12 @@ Row leaveArrive() {
       ),
       Column(
         children: <Widget>[
-          Icon(
-            Icons.youtube_searched_for,
-            color: Colors.blueAccent,
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.youtube_searched_for,
+              color: Colors.blueAccent,
+            ),
           ),
         ],
       ),
@@ -170,10 +184,12 @@ class _CalendarState extends State<CalendarSection> {
       children: <Widget>[
         Column(
           children: <Widget>[
-            Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black26,
-              size: 20,
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.black26,
+                size: 20,),
             ),
           ],
         ),
@@ -197,6 +213,7 @@ class _CalendarState extends State<CalendarSection> {
                         : _dateTime.day.toString(),
                     style: TextStyle(color: Colors.blueAccent, fontSize: 18)),
                 Text('일'),
+
               ],
             ),
           ],
@@ -205,10 +222,16 @@ class _CalendarState extends State<CalendarSection> {
         ),
         Column(
           children: <Widget>[
-            Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.black26,
-              size: 20,
+            IconButton(
+              onPressed: () {
+                setState(() {
+
+                });
+              },
+              icon: Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.black26,
+                size: 20,),
             ),
           ],
         ),
