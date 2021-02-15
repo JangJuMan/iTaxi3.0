@@ -1,3 +1,42 @@
+/*
+* 작성자: 장주만, 01041578299, wnaks9901@gmail.com
+*
+* [CLASS]
+*   ChatRoomInfo : 채탕방 정보
+*     List<Participant> : 참여자 정보
+*     List<Chat> : 채팅 정보
+*
+* Future<ChatRoomInfo>
+*   채팅방 데이터 받아오기
+*
+* ChatScreen(Stateful)
+*   => _ChatScreenState(State<ChatScreen>)
+*     build(Scafold)
+*       AppBar
+*       body: Center
+*         FutureBuilder : 데이터 불러오기
+*           ㄴ  _wid_chatScreen : 채팅방 스크린
+*                 _wid_roomInfo : 채팅방 정보
+*                     _comp_roomInfo(방 정보)
+*                     _comp_participantInfo(참여자 정보)
+*
+*           ㄴ   Flexible(채팅기록)
+*                 SmartRefresher
+*                   ListBuilder : 채팅 말풍선(_chatBubble)
+*
+*           ㄴ   _wid_textInput(채팅 입력창)
+*
+* createDutchAlertDialog : 더치페이 Dialog 창
+*
+* [Method]
+* _onRefresh : 새로고침
+* _onLoading : 새로고침 로딩중
+* _doDutchPay : 더치페이
+* _handleSubmitted : 새로운 메시지 보내기
+*
+*
+*
+* */
 import 'dart:async';
 import 'dart:convert';
 
@@ -15,8 +54,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 // Widget > Component > Element
 
+// TODO: 로그인한 사용자의 이름으로 일괄 수정 필요
 String _name = "장주만";
 
+// 참여자 정보
 class Participant{
   String user_name;
   String phone_number;
@@ -33,6 +74,7 @@ class Participant{
   }
 }
 
+// 채팅 정보
 class Chat{
   String content;
   String date_time;
@@ -40,9 +82,11 @@ class Chat{
   bool is_chat;
   List reads;
 
+  // 리스트는 [] 를 씌워주는가바.
   Chat(this.content, this.date_time, this.user_name, this.is_chat, [this.reads]);
 
   factory Chat.fromJson(dynamic json){
+    // 단순(String) 리스트로 파싱하기
     var readsJson = json['read'] as List;
     List _read = readsJson != null ? List.from(readsJson) : null;
 
@@ -70,7 +114,7 @@ class ChatRoomInfo {
   bool is_paid;
 
 
-
+  // 리스트는 []를 씌워 주는가바
   ChatRoomInfo(
     this._id, this.departure_date, this.departure_time,
     this.departure_place, this.arrival_place, this.max_people,
@@ -79,19 +123,15 @@ class ChatRoomInfo {
 
 
   factory ChatRoomInfo.fromJson(json){
-    // DEBUG
-    print('Json 원본: ');
-    print(json);
-
-    // 참여자 정보
+    // 참여자 정보 (Object List 로 파싱)
     var participantJson = json['participants'] as List;
     List _participants = participantJson.map((partiJson) => Participant.fromJson(partiJson)).toList();
 
-    // 채팅정보
+    // 채팅정보 (Object List 로 파싱)
     var chatsJson = json['chats'] as List;
     List _chats = chatsJson.map((chatJson) => Chat.fromJson(chatJson)).toList();
 
-
+    // 순서 잘 지키기
     return ChatRoomInfo(
       json['_id'] as String,
       json['departure_date'] as String,
@@ -129,14 +169,15 @@ class ChatScreen extends StatefulWidget{
 
 
 class _ChatScreenState extends State<ChatScreen> {
+  // TODO: 채팅방 제목 DB에서 받아온 정보로 (???방장 or 좋을대로)
   String roomTitle = "채팅방 제목";
   Future<ChatRoomInfo> futureChatRoomInfo;
   Future<void> _launched;
 
+  // TODO: 샘플 채팅 데이터를 실제 데이터로 바꾸기. (샘플데이터는 messageModel.dart에 있음)
+
   // 텍스트 컨트롤러 객체
   final _textController = TextEditingController();
-  // 채팅기록을 담은 리스트 (messageModel.dart => sampleMessages)
-  // final List<ChatMessage> _messages = [];
 
   // 메시지 입력 후 TextField에 다시 포커싱 담당
   final FocusNode _focusNode = FocusNode();
@@ -144,26 +185,30 @@ class _ChatScreenState extends State<ChatScreen> {
   // 사용자가 입력중인가?
   bool _isWriting = false;
 
-  // 사용자 정보 확장 변수
-  List isParticipantVisible = [true, true, true, true];
+  // 상단 사용자 아이콘의 확장 여부 변수 (택시기준으로 4개 만들었다가 카풀은? 해서 6개까지 만듦)
+  // TODO: 가장 좋은건 데이터 통신으로 max_people 사이즈대로 만들어 놓는 것.
+  List isParticipantVisible = [true, true, true, true, true, true];
 
   // 스크롤 컨트롤러 객체
   ScrollController _scrollController = new ScrollController();
 
   // 새로고침 컨트롤러 객체
   RefreshController _refreshController = RefreshController(initialRefresh: false);
-  int numOfMsg = 0;
   bool isEnablePullUp = true;
+
+  // 채팅의 개수 저장. 초기값 선언. 데이터 로드되면 새로운 값으로 재할당
+  int numOfMsg = 0;
 
   // 정산하기 관련
   TextEditingController dutchPriceController = TextEditingController();
   TextEditingController dutchPeopleController = TextEditingController();
   var _ducthpayFormKey = GlobalKey<FormState>();
-  // int numOfPeople = 1;
+  // 출력할때 String이 편하더라구요 그래서 int 아니고 String 했음.
   String numOfPeople = '1';
   int currPerson = 1;
   int totalPrice = 0;
 
+  // 새로고침
   void _onRefresh() async {
     // monitor network fetch
     await Future.delayed(Duration(milliseconds: 1000));
@@ -171,6 +216,7 @@ class _ChatScreenState extends State<ChatScreen> {
     _refreshController.refreshCompleted();
   }
 
+  // 새로고침 되는 로딩시간
   void _onLoading() async{
     // monitor network fetch
     await Future.delayed(Duration(milliseconds: 1000));
@@ -178,17 +224,16 @@ class _ChatScreenState extends State<ChatScreen> {
     // if failed,use loadFailed(),if no data return,use LoadNodata()
 
     if(mounted){
-      // TODO: 한.. 20? 30? 이 적당하지 않을까? 지금은 보여주기 위해서 10개로 해놓음.
+      // TODO: sampleMessage 에서 실제 채팅 데이터로 바꿔야 함.
+      // 새로고침 할때마다 10개씩 더보여줌. 조정 가능
       if(numOfMsg + 10 < sampleMessages.length){
         numOfMsg += 10;
       }
       else{
         numOfMsg = sampleMessages.length;
+        // 메시지를 끝까지 다 올리면 새로고침이 더 안되도록 함.
         isEnablePullUp = false;
       }
-      setState(() {
-        // numOfMsg += 10;
-      });
     }
 
     _refreshController.loadComplete();
@@ -202,24 +247,25 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     futureChatRoomInfo = fetchChatRoomInfo();
 
-
     // 보여줄 메시지 개수 세팅
+    // TODO: sampleMessage -> 실제 채팅 데이터로 바꿔야 함.
+    // TODO: 보여주는 메시지 개수 조정필요. (한.. 20? 30? 이 적당하지 않을까? 지금은 보여주기 위해서 10개로 해놓음.)
     if(sampleMessages.length <= 10){
+      // 10개보다 안되면 딱 고만큼만..!
       numOfMsg = sampleMessages.length;
     }
     else{
       numOfMsg = 10;
     }
 
-    // TODO: 방 안의 사람숫자 DB에서 불러와서 업데이트
+    // TODO: 방 안의 사람숫자 max_people DB에서 불러와서 업데이트
+    // 데이터는 불러왔는데 어떻게 부르는지를 모르네 하하핳ㅎ;;;;ㅈㅅ
     numOfPeople = '3';
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         backgroundColor: Colors.white,
         brightness: Brightness.light,    // 상태창 글씨 색을 어둡게
@@ -227,6 +273,7 @@ class _ChatScreenState extends State<ChatScreen> {
         // elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
         centerTitle: true,
         title: Text(roomTitle, style: TextStyle(fontSize: 18)),
+        // 하얀 바탕의 검은 화살표. 위의 세팅으로 다 표시가 되는데 혹시 안되면 이 부분 쓸 것.
         // leading: IconButton(
         //   icon: Icon(Icons.arrow_back_ios),
         //   color: Colors.black,
@@ -236,12 +283,14 @@ class _ChatScreenState extends State<ChatScreen> {
         // ),
       ),
       body: Center(
+        // 데이터 받아와서 랜더링
         child: FutureBuilder<ChatRoomInfo>(
           future: futureChatRoomInfo,
           builder: (context, snapshot) {
             if(snapshot.hasError){
               return Text('${snapshot.error}');
             }
+            // 데이터가 있을때까지 progressIndicator 돌리고, 데이터 오면 렌더링 시작
             return snapshot.hasData ? _wid_chatScreen(snapshot) : CircularProgressIndicator();
           },
         ),
@@ -252,23 +301,9 @@ class _ChatScreenState extends State<ChatScreen> {
   // Widget: 채팅방 스크린
   // ignore: non_constant_identifier_names
   Widget _wid_chatScreen([AsyncSnapshot<ChatRoomInfo> snapshot]) {
-    // snapshot 데이터 파싱 (TODO: 나중에 수정)
-    String test1 = snapshot.data.participants[0].user_name;
-    String test2 = snapshot.data.chats[0].content;
-    print(test2);
-
-    int id = 1;
-    int userId = 1;
-    String title = "title";
-
-    // int id = snapshot.data.test[0].id;
-    // int userId = snapshot.data.test[0].userId;
-    // String title = snapshot.data.test[0].title;
-
-    // 이전과 같은 사람?
+    // 이전과 같은 사람의 말풍선인지 확인하기 위해
     String prevUserName = _name;
     String prevDatetime = '0000-00-00 00:00:00';
-    // DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
 
     return Container(
       child: Column(
@@ -288,6 +323,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
           // 채팅기록
           Flexible(
+            // 새로고침 위젯
             child: SmartRefresher(
               enablePullDown: false,
               enablePullUp: isEnablePullUp,
@@ -297,6 +333,7 @@ class _ChatScreenState extends State<ChatScreen> {
               onRefresh: _onRefresh,
               onLoading: _onLoading,
 
+              // 채팅 말풍선 빌더
               child: ListView.builder(
                 controller: _scrollController,
                 padding: EdgeInsets.all(10.0),
@@ -379,13 +416,6 @@ class _ChatScreenState extends State<ChatScreen> {
   Container _cmp_roomInfo({String departure_place, String arrival_place, String departure_date, String departure_time, int max_people, int curr_people}){
     return Container(
       padding: EdgeInsets.all(1.0),
-      // decoration: BoxDecoration(
-      //   border: Border(
-      //     // bottom: BorderSide(width: 1.0, color: Colors.black26),
-      //   ),
-      //   // color: Colors.white,
-      //   // color: Color.fromRGBO(0xF5, 0xF5, 0xF5, 1),
-      // ),
 
       child: Row(
         children: [
@@ -404,17 +434,6 @@ class _ChatScreenState extends State<ChatScreen> {
                     ],
                   ),
                 ),
-                // Container(
-                //   padding: EdgeInsets.all(2.0),
-                //   margin: EdgeInsets.all(2.0),
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.center,
-                //     children: [
-                //       Icon(Icons.arrow_forward),
-                //       Text(" "+arrival_place, style: TextStyle(fontSize: 16)),
-                //     ],
-                //   ),
-                // ),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
                   margin: EdgeInsets.all(0.0),
@@ -454,42 +473,42 @@ class _ChatScreenState extends State<ChatScreen> {
                     },
                 ),
 
-                // // 테마별 적용..?
-                // Theme.of(context).platform != TargetPlatform.iOS
-                //     ? CupertinoButton(
-                //       child: Text(
-                //         '방 나가기',
-                //         style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.w600, fontSize: 16),
-                //       ),
-                //       onPressed: () => {},
-                //     )
-                //     : RaisedButton(
-                //       child: Text('방 나가기', style: TextStyle(color: Colors.white)),
-                //       color: Colors.redAccent,
-                //       onPressed: () => {},
-                //     ),
-                // // TODO: 방장한테만 보이기, (상관없나?)
-                // Theme.of(context).platform != TargetPlatform.iOS
-                //     ? CupertinoButton(
-                //       child: Text(
-                //         '더치페이',
-                //         style: TextStyle(color: Colors.indigoAccent, fontWeight: FontWeight.w600, fontSize: 16),
-                //       ),
-                //       onPressed: () => {
-                //         createDutchAlertDialog(context).then((onValue){
-                //           _doDutchPay();
-                //         })
-                //       },
-                //     )
-                //     : RaisedButton(
-                //       child: Text('더치페이', style: TextStyle(color: Colors.white)),
-                //       color: Colors.indigoAccent,
-                //       onPressed: () => {
-                //         createDutchAlertDialog(context).then((onValue){
-                //           _doDutchPay();
-                //         })
-                //       },
-                //     ),
+                // TODO: 테마별 적용을 하시겠다면 아래의 코드를 사용. 근데 난 쿠퍼티노 버튼이 이쁘더라
+                /*Theme.of(context).platform != TargetPlatform.iOS
+                    ? CupertinoButton(
+                      child: Text(
+                        '방 나가기',
+                        style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.w600, fontSize: 16),
+                      ),
+                      onPressed: () => {},
+                    )
+                    : RaisedButton(
+                      child: Text('방 나가기', style: TextStyle(color: Colors.white)),
+                      color: Colors.redAccent,
+                      onPressed: () => {},
+                    ),
+
+                Theme.of(context).platform != TargetPlatform.iOS
+                    ? CupertinoButton(
+                      child: Text(
+                        '더치페이',
+                        style: TextStyle(color: Colors.indigoAccent, fontWeight: FontWeight.w600, fontSize: 16),
+                      ),
+                      onPressed: () => {
+                        createDutchAlertDialog(context).then((onValue){
+                          _doDutchPay();
+                        })
+                      },
+                    )
+                    : RaisedButton(
+                      child: Text('더치페이', style: TextStyle(color: Colors.white)),
+                      color: Colors.indigoAccent,
+                      onPressed: () => {
+                        createDutchAlertDialog(context).then((onValue){
+                          _doDutchPay();
+                        })
+                      },
+                    ),*/
               ],
             ),
           ),
@@ -498,6 +517,8 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  // 더치페이 계산하기
+  // TODO: sampleMessage -> 실제 데이터로 post하도록 수정
   _doDutchPay(){
     // 입력된 금액으로 정산해서 시스템 메시지로 전송
 
@@ -510,14 +531,18 @@ class _ChatScreenState extends State<ChatScreen> {
 
     String text = '$account 로 $resultPrcie 원 입금 부탁드립니다.';
 
+    // 새로운 메시지 생성 (TODO: messageModel.dart 에 있음)
     Message inputMessage = Message(
       content: text,
       date_time: nowTime,
+      // TODO: 로그인한 사용자의 이름이 _name 이어야 한다.
       user_name: _name,
+      // 시스템 메시지로 출력되기 때문에 유저네임은 크게 중요x. 누가 말한지는 기록만 하자.
       // user_name: '시스템',
       is_chat: false,
     );
 
+    // 샘플 데이터에 추가 및 보여주는 메시지 길이 +1
     setState(() {
       sampleMessages.insert(0, inputMessage);
       numOfMsg++;
@@ -532,6 +557,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  // 정산하기 Dialog 창 띄우기
   Future<String> createDutchAlertDialog(BuildContext context){
     return showDialog(context: context, builder: (context){
       return AlertDialog(
@@ -613,30 +639,29 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-
   // Component: 참가자 리스트
   // ignore: non_constant_identifier_names
   Container _cmp_participantInfo({List participants}){
     return Container(
       padding: EdgeInsets.symmetric(vertical: 2.0),
       decoration: BoxDecoration(
-        border: Border(
-          // bottom: BorderSide(width: 1.0, color: Colors.black26),
-        ),
         color: Colors.black12,
       ),
+
       // 컨테이너의 높이를 설정
       height: 50.0,
+
       // 리스트뷰 추가
       child: ListView(
         // 스크롤 방향 설정. 수평적으로 스크롤되도록 설정
         scrollDirection: Axis.horizontal,
+
         // 컨테이너들을 ListView의 자식들로 추가
         children: <Widget>[
           for(int i = 0; i < participants.length; i++)
             _elem_participantUnit(participants[i].user_name, i, isParticipantVisible[i], participants[i].phone_number),
 
-          // _elem_participantUnit('장주만', 1, isParticipantVisible[1], '01041578299'),
+          // 샘플: _elem_participantUnit('장주만', 1, true, '01041578299'),
         ],
       ),
     );
@@ -658,13 +683,9 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
             iconSize: 55,
             icon: Container(
-              // padding: EdgeInsets.all(5.0),
-              // decoration: BoxDecoration(
-              //   border: Border.all(width: 1.0),
-              //   borderRadius: BorderRadius.circular(15.0),
-              // ),
               child: Text(name, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
             ),
+            // 눌리는 사람꺼 확인해서 hide or show 하기.
             onPressed: () {
               setState(() {
                 if(btnNumber == 0){
@@ -682,19 +703,20 @@ class _ChatScreenState extends State<ChatScreen> {
               });
             },
           ),
+          // hide 모드일때 안보이도록 하기.
           Visibility(
             visible: isVisible,
             child: IconButton(
-                icon: Icon(Icons.call, size: 16),
-                onPressed: () => setState(() {
-                  _launched = _makePhoneCall('tel:$_phone');
-                }),
+              icon: Icon(Icons.call, size: 16),
+              onPressed: () => setState(() {
+                _launched = _makePhoneCall('tel:$_phone');
+              }),
             ),
           ),
           Visibility(
             visible: isVisible,
             child: IconButton(
-                icon: Icon(Icons.message, size: 16),
+              icon: Icon(Icons.message, size: 16),
               onPressed: () => setState(() {
                 _launched = _makePhoneCall('sms:$_phone');
               }),
@@ -715,11 +737,12 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
 
-
   // Widget: 채팅 말풍선
   Widget _chatBubble(Message message, bool isMe, bool isSameUser, bool isSameTime, bool isSameWithPrevUser) {
-    if(message.is_chat){    // 사용자 메시지
-      if (isMe) {           // 내가 보낸 채팅
+    // 사용자 메시지
+    if(message.is_chat){
+      // 내가 보낸 메시지
+      if (isMe) {
         return Column(
           children: <Widget>[
             Container(
@@ -771,11 +794,10 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
         );
       }
-      else {    // 다른 사람이 보낸 메시지
+      // 다른 사람이 보낸 메시지
+      else {
         return Container(
           alignment: Alignment.topLeft,
-          // margin: EdgeInsets.symmetric(vertical: 0.0),
-          // margin: !isSameUser ? EdgeInsets.symmetric(vertical: 10.0) : EdgeInsets.symmetric(vertical: 0.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -878,7 +900,8 @@ class _ChatScreenState extends State<ChatScreen> {
         );
       }
     }
-    else{     // 시스템 메시지
+    // 시스템 메시지
+    else{
       return Container(
         margin: EdgeInsets.symmetric(vertical: 10.0),
         child: Row(
@@ -891,7 +914,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: [
                   Container(
                     alignment: Alignment.center,
-                    // width: double.infinity,
                     constraints: BoxConstraints(
                       maxWidth: MediaQuery.of(context).size.width * 0.80,
                     ),
@@ -909,10 +931,12 @@ class _ChatScreenState extends State<ChatScreen> {
                       ],
                     ),
                     child: GestureDetector(
+                      // 길게 클릭시 (난 이걸 선호함.)
                       onLongPress: () {
                         Clipboard.setData(ClipboardData(text: message.content));
                         Fluttertoast.showToast(msg: "클립보드에 복사되었습니다.");
                       },
+                      // 짧게라도 클릭시
                       // onTap: () {
                       //   Clipboard.setData(ClipboardData(text: message.content));
                       //   Fluttertoast.showToast(msg: "클립보드에 복사되었습니다.");
@@ -934,7 +958,6 @@ class _ChatScreenState extends State<ChatScreen> {
       );
     }
   }
-
 
 
 
@@ -975,6 +998,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
 
   // Method: 채팅 보내기 클릭시 실행
+  // TODO: sampleMessage -> 실제 데이터에 추가되도록
   void _handleSubmitted(String text){
     // 텍스트 필드 비우기
     _textController.clear();
@@ -987,6 +1011,7 @@ class _ChatScreenState extends State<ChatScreen> {
     // 메시지 리스트에 사용자가 보낸 메시지를 .insert(index, element)
     var nowTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
 
+    // 새로운 메시지 생성 (TODO: messageModel.dart 에 있음)
     Message inputMessage = Message(
       content: text,
       date_time: nowTime,
@@ -994,24 +1019,11 @@ class _ChatScreenState extends State<ChatScreen> {
       is_chat: true,
     );
 
+    // 메시지 추가 및 보여주는 메시지 +1
     setState(() {
       sampleMessages.insert(0, inputMessage);
       numOfMsg++;
-      // isEnablePullUp = true;
-      // _messages.insert(0, inputMessage);
     });
-
-    // ChatMessage inputMessage = ChatMessage(
-    //   content: text,
-    //   date_time: nowTime,
-    //   user_name: _name,
-    //   is_chat: true,
-    // );
-    //
-    // setState(() {
-    //   sampleMessages.insert(0, inputMessage);
-    //   // _messages.insert(0, inputMessage);
-    // });
 
     // TextField에 다시 입력 포커스
     _focusNode.requestFocus();
@@ -1022,540 +1034,5 @@ class _ChatScreenState extends State<ChatScreen> {
       curve: Curves.easeOut,
       duration: const Duration(milliseconds: 300),
     );
-
   }
 }
-
-// class _ChatScreenState extends State<ChatScreen> {
-//   String roomTitle = "채팅방 제목";
-//   Future<ChatRoomInfo> futureChatRoomInfo;
-//   Future<void> _launched;
-//
-//   // 텍스트 컨트롤러 객체
-//   final _textController = TextEditingController();
-//   // 채팅기록을 담은 리스트
-//   final List<ChatMessage> _messages = [];
-//   // 메시지 입력 후 TextField에 다시 포커싱 담당
-//   final FocusNode _focusNode = FocusNode();
-//   // 사용자가 입력중인가?
-//   bool _isWriting = false;
-//   // 사용자 정보 확장 변수
-//   bool _isVisible01 = true;
-//   bool _isVisible02 = true;
-//   bool _isVisible03 = true;
-//   bool _isVisible04 = true;
-//
-//
-//   // 스크롤 컨트롤러 객체
-//   ScrollController _scrollController = new ScrollController();
-//
-//   // 새로고침 컨트롤러 객체
-//   RefreshController _refreshController = RefreshController(initialRefresh: false);
-//
-//   int numOfMsg = 10;
-//   bool isEnablePullUp = true;
-//
-//   void _onRefresh() async {
-//     // monitor network fetch
-//     await Future.delayed(Duration(milliseconds: 1000));
-//     // if failed, use refreshFailed()
-//     _refreshController.refreshCompleted();
-//   }
-//
-//   void _onLoading() async{
-//     // monitor network fetch
-//     await Future.delayed(Duration(milliseconds: 1000));
-//
-//     // if failed,use loadFailed(),if no data return,use LoadNodata()
-//
-//     if(mounted){
-//       if(numOfMsg + 10 < _messages.length){
-//         numOfMsg += 10;
-//       }
-//       else{
-//         numOfMsg = _messages.length;
-//         isEnablePullUp = false;
-//       }
-//       setState(() {
-//         // numOfMsg += 10;
-//       });
-//     }
-//
-//     _refreshController.loadComplete();
-//   }
-//
-//
-//
-//   // 최초 1번만 데이터 로드할 때,
-//   @override
-//   void initState() {
-//     super.initState();
-//     futureChatRoomInfo = fetchChatRoomInfo();
-//     // futureAlbum = fetchAlbum();
-//
-//     // FOR DEBUG
-//     var nowTime = DateFormat('HH:mm').format(DateTime.now());
-//
-//     for(int i=0; i<10; i++) {
-//       // 메시지 리스트에 사용자가 보낸 메시지를 .insert(index, element)
-//       ChatMessage inputMessage = ChatMessage(
-//         content: "샘플메시지입니다." + i.toString(),
-//         date_time: nowTime,
-//         user_name: "상대방",
-//         is_chat: true,
-//       );
-//
-//       setState(() {
-//         _messages.insert(0, inputMessage);
-//       });
-//     }
-//
-//     // FOR DEBUG
-//     for(int i=10; i<20; i++) {
-//       // 메시지 리스트에 사용자가 보낸 메시지를 .insert(index, element)
-//       ChatMessage inputMessage = ChatMessage(
-//         content: "시스템 안내 메시지 입니다." + i.toString(),
-//         date_time: nowTime,
-//         user_name: "시스템",
-//         is_chat: false,
-//       );
-//
-//       setState(() {
-//         _messages.insert(0, inputMessage);
-//       });
-//     }
-//
-//     // FOR DEBUG
-//     for(int i=20; i<30; i++) {
-//       // 메시지 리스트에 사용자가 보낸 메시지를 .insert(index, element)
-//       ChatMessage inputMessage = ChatMessage(
-//         content: "내가보낸 메시지 입니다." + i.toString(),
-//         date_time: nowTime,
-//         user_name: _name,
-//         is_chat: true,
-//       );
-//
-//       setState(() {
-//         _messages.insert(0, inputMessage);
-//       });
-//     }
-//
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       // resizeToAvoidBottomPadding: false,
-//       appBar: AppBar(
-//         // TODO: 나중에 setState로 ??? 방장? 이런식으로 제목 바꾸기
-//         title: Text(roomTitle),
-//         elevation: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 4.0,
-//       ),
-//       body: Center(
-//         child: FutureBuilder<ChatRoomInfo>(
-//           future: futureChatRoomInfo,
-//           builder: (context, snapshot) {
-//             if(snapshot.hasError){
-//               return Text('${snapshot.error}');
-//             }
-//             return snapshot.hasData ? _wid_chatScreen(snapshot) : CircularProgressIndicator();
-//           },
-//         ),
-//       ),
-//     );
-//   }
-//
-//   // Widget: 채팅방 스크린
-//   // ignore: non_constant_identifier_names
-//   Widget _wid_chatScreen([AsyncSnapshot<ChatRoomInfo> snapshot]) {
-//     // snapshot 데이터 파싱 (TODO: 나중에 수정)
-//     int id = snapshot.data.id;
-//     int userId = snapshot.data.userId;
-//     String title = snapshot.data.title;
-//
-//     return Container(
-//         child: Column(
-//           children: [
-//             // 채팅방 정보
-//             Container(
-//               child: _wid_roomInfo(
-//                   departure_place: title,
-//                   arrival_place: title,
-//                   departure_date: id.toString(),
-//                   depature_time: userId.toString()
-//               ),
-//             ),
-//
-//             // 채팅기록
-//             Flexible(
-//               child: SmartRefresher(
-//                 enablePullDown: false,
-//                 enablePullUp: isEnablePullUp,
-//                 header: WaterDropHeader(),
-//                 footer: ClassicFooter(),
-//                 // CustomFooter(
-//                 //   builder: (BuildContext context, LoadStatus mode){
-//                 //     Widget body;
-//                 //     if(mode==LoadStatus.idle){
-//                 //       body =  Text("불러오기에 실패하였습니다. 다시 시도해주세요.");
-//                 //     }
-//                 //     else if(mode==LoadStatus.loading){
-//                 //       body =  CupertinoActivityIndicator();
-//                 //     }
-//                 //     else if(mode == LoadStatus.failed){
-//                 //       body = Text("불러오기에 실패하였습니다. 다시 시도해주세요.");
-//                 //     }
-//                 //     else if(mode == LoadStatus.canLoading){
-//                 //       body = Text("위로 스크롤하여 이전 대화를 확인하세요.");
-//                 //     }
-//                 //     else{
-//                 //       body = Text("이전 데이터가 없습니다.");
-//                 //     }
-//                 //     return Container(
-//                 //       height: 1.0,
-//                 //       child: Center(child:body),
-//                 //     );
-//                 //   },
-//                 // ),
-//                 controller: _refreshController,
-//                 onRefresh: _onRefresh,
-//                 onLoading: _onLoading,
-//                 child: ListView.builder(
-//                   controller: _scrollController,
-//                   padding: EdgeInsets.all(8.0),
-//                   reverse: true,
-//                   itemBuilder: (context, int index) => _messages[index],
-//                   itemCount: numOfMsg,
-//                   // itemCount: _messages.length,
-//                 ),
-//               ),
-//             ),
-//
-//
-//             // 채팅기록 (원본)
-//             // Flexible(
-//             //   child: ListView.builder(
-//             //     controller: _scrollController,
-//             //     padding: EdgeInsets.all(8.0),
-//             //     reverse: true,
-//             //     itemBuilder: (context, int index) => _messages[index],
-//             //     itemCount: _messages.length,
-//             //   ),
-//             //   // ChatList(),
-//             // ),
-//
-//             // 디바이더
-//             Divider(height: 1.0),
-//
-//             // 채팅 입력창
-//             Container(
-//               decoration: BoxDecoration(
-//                   color: Theme.of(context).cardColor),
-//               child: _wid_textInput(),
-//             ),
-//           ],
-//         ),
-//         decoration: Theme.of(context).platform == TargetPlatform.iOS
-//             ? BoxDecoration(
-//           border: Border(
-//             top: BorderSide(color: Colors.grey[200]),
-//           ),
-//         )
-//             : null
-//     );
-//   }
-//
-//
-//   // Widget: 채팅방 정보
-//   // ignore: non_constant_identifier_names
-//   Widget _wid_roomInfo({String departure_place, String arrival_place, String departure_date, String depature_time}){
-//     // 기본값 설정
-//     departure_place ??= "";
-//     arrival_place ??= "";
-//     departure_date ??= "";
-//     depature_time ??= "";
-//
-//     return Container(
-//       child: Column(
-//         children: [
-//           _cmp_roomInfo(
-//               departure_place: departure_place,
-//               arrival_place: arrival_place,
-//               departure_date: departure_date,
-//               depature_time: depature_time
-//           ),
-//           _cmp_participantInfo(),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   // Component: 방정보
-//   // ignore: non_constant_identifier_names
-//   Container _cmp_roomInfo({String departure_place, String arrival_place, String departure_date, String depature_time}){
-//     return Container(
-//         padding: EdgeInsets.symmetric(vertical: 7.0, horizontal: 7.0),
-//
-//         decoration: BoxDecoration(
-//           border: Border(
-//             // bottom: BorderSide(width: 1.0, color: Colors.black26),
-//           ),
-//           color: Color.fromRGBO(0xF5, 0xF5, 0xF5, 1),
-//         ),
-//
-//         child: Row(
-//           children: [
-//             Flexible(
-//               child: Column(
-//                 children: [
-//                   Container(
-//                     padding: EdgeInsets.all(2.0),
-//                     margin: EdgeInsets.all(2.0),
-//                     child: Row(
-//                       children: [
-//                         Text(departure_place, style: TextStyle(fontSize: 20)),
-//                       ],
-//                     ),
-//                   ),
-//                   Container(
-//                     padding: EdgeInsets.all(2.0),
-//                     margin: EdgeInsets.all(2.0),
-//                     child: Row(
-//                       mainAxisAlignment: MainAxisAlignment.end,
-//                       children: [
-//                         Icon(Icons.arrow_forward),
-//                         Text(" "+arrival_place, style: TextStyle(fontSize: 20)),
-//                       ],
-//                     ),
-//                   ),
-//                   Container(
-//                     padding: EdgeInsets.all(2.0),
-//                     margin: EdgeInsets.all(2.0),
-//                     child: Row(
-//                       children: [
-//                         Icon(Icons.departure_board, size: 20),
-//                         Text(" "+departure_date+"  "+depature_time, style: TextStyle(fontSize: 20)),
-//                       ],
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//             Container(
-//               margin: EdgeInsets.only(left: Theme.of(context).platform == TargetPlatform.iOS ? 0.0 : 10.0),
-//               child: Column(
-//                 children: [
-//                   Theme.of(context).platform == TargetPlatform.iOS
-//                       ? CupertinoButton(
-//                     child: Text(
-//                       '방 나가기',
-//                       style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.w600),
-//                     ),
-//                     onPressed: () => {},
-//                   )
-//                       : RaisedButton(
-//                     child: Text('방 나가기', style: TextStyle(color: Colors.white)),
-//                     color: Colors.redAccent,
-//                     onPressed: () => {},
-//                   ),
-//                   // TODO: 방장한테만 보이기, (상관없나?)
-//                   Theme.of(context).platform == TargetPlatform.iOS
-//                       ? CupertinoButton(
-//                     child: Text(
-//                       '정산하기',
-//                       style: TextStyle(color: Colors.indigoAccent, fontWeight: FontWeight.w600),
-//                     ),
-//                     onPressed: () => {},
-//                   )
-//                       : RaisedButton(
-//                     child: Text('정산하기', style: TextStyle(color: Colors.white)),
-//                     color: Colors.indigoAccent,
-//                     onPressed: () => {},
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         )
-//     );
-//   }
-//
-//
-//   // Component: 참가자 리스트
-//   // ignore: non_constant_identifier_names
-//   Container _cmp_participantInfo(){
-//     return Container(
-//       padding: EdgeInsets.symmetric(vertical: 2.0),
-//       decoration: BoxDecoration(
-//         border: Border(
-//           // bottom: BorderSide(width: 1.0, color: Colors.black26),
-//         ),
-//         color: Colors.black12,
-//       ),
-//       // 컨테이너의 높이를 설정
-//       height: 55.0,
-//       // 리스트뷰 추가
-//       child: ListView(
-//         // 스크롤 방향 설정. 수평적으로 스크롤되도록 설정
-//         scrollDirection: Axis.horizontal,
-//         // 컨테이너들을 ListView의 자식들로 추가
-//         children: [
-//           // TODO: 반복문... 안써도 되나?
-//           _elem_participantUnit('장주만', 1, _isVisible01, '01041578299'),
-//           _elem_participantUnit('홍길참', 2, _isVisible02, '01012341234'),
-//           _elem_participantUnit('김참길', 3, _isVisible03, '01023452345'),
-//           _elem_participantUnit('고베어', 4, _isVisible04, '01034564567'),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   // Element: 참가자 정보 유닛
-//   // ignore: non_constant_identifier_names
-//   Container _elem_participantUnit(name, btnNumber, bool isVisible, String _phone){
-//     return Container(
-//       margin: EdgeInsets.symmetric(vertical: 2.0, horizontal: 3.0),
-//       padding: EdgeInsets.symmetric(horizontal: 4.0),
-//       decoration: BoxDecoration(
-//         border: Border.all(width: 1.0, color: Colors.cyan),
-//         borderRadius: BorderRadius.circular(30.0),
-//         color: Color.fromRGBO(0xF5, 0xF5, 0xF5, 1),
-//       ),
-//       child: Row(
-//         children: [
-//           IconButton(
-//             iconSize: 60,
-//             icon: Container(
-//               padding: EdgeInsets.all(5.0),
-//               decoration: BoxDecoration(
-//                 // border: Border.all(width: 1.0),
-//                 borderRadius: BorderRadius.circular(15.0),
-//               ),
-//               child: Text(name, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-//             ),
-//             onPressed: () {
-//               setState(() {
-//                 if(btnNumber == 1){
-//                   _isVisible01 = !_isVisible01;
-//                 }
-//                 else if(btnNumber == 2){
-//                   _isVisible02 = !_isVisible02;
-//                 }
-//                 else if(btnNumber == 3){
-//                   _isVisible03 = !_isVisible03;
-//                 }
-//                 else if(btnNumber == 4){
-//                   _isVisible04 = !_isVisible04;
-//                 }
-//               });
-//             },
-//           ),
-//           Visibility(
-//             visible: isVisible,
-//             child: IconButton(
-//               icon: Icon(Icons.call, size: 20),
-//               // TODO: 전화연결
-//               onPressed: () => setState(() {
-//                 _launched = _makePhoneCall('tel:$_phone');
-//               }),
-//             ),
-//           ),
-//           Visibility(
-//             visible: isVisible,
-//             child: IconButton(
-//               icon: Icon(Icons.message, size: 20),
-//               // TODO: 문자 보내기
-//               onPressed: () => setState(() {
-//                 _launched = _makePhoneCall('sms:$_phone');
-//               }),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   Future<void> _makePhoneCall(String url) async {
-//     if(await canLaunch(url)){
-//       await launch(url);
-//     } else {
-//       throw 'Could not launch $url';
-//     }
-//   }
-//
-//
-//
-//
-//
-//   // Widget: 텍스트 입력
-//   // ignore: non_constant_identifier_names
-//   Widget _wid_textInput(){
-//     return Container(
-//       margin: EdgeInsets.symmetric(horizontal: 8.0),
-//       child: Row(
-//         children: [
-//           Flexible(
-//             child: TextField(
-//               controller: _textController,
-//               onChanged: (String text){
-//                 setState(() {
-//                   _isWriting = text.length > 0;
-//                 });
-//               },
-//               onSubmitted: _isWriting ? _handleSubmitted : null,
-//               decoration: InputDecoration.collapsed(hintText: "보낼 메시지를 입력하세요"),
-//               focusNode: _focusNode,
-//             ),
-//           ),
-//           Container(
-//               margin: EdgeInsets.symmetric(horizontal: 4.0),
-//               child: Theme.of(context).platform == TargetPlatform.iOS
-//                   ? CupertinoButton(
-//                   child: Text('보내기'),
-//                   onPressed: _isWriting ? () => _handleSubmitted(_textController.text) : null)
-//                   : IconButton(
-//                   icon: Icon(Icons.send),
-//                   onPressed: _isWriting ? () => _handleSubmitted(_textController.text) : null)
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-//
-//
-//   // Method: 채팅 보내기 클릭시 실행
-//   void _handleSubmitted(String text){
-//     // 텍스트 필드 비우기
-//     _textController.clear();
-//
-//     // 텍스트 작성중 --> false
-//     setState(() {
-//       _isWriting = false;
-//     });
-//
-//     // 메시지 리스트에 사용자가 보낸 메시지를 .insert(index, element)
-//     var nowTime = DateFormat('HH:mm').format(DateTime.now());
-//
-//     ChatMessage inputMessage = ChatMessage(
-//       content: text,
-//       date_time: nowTime,
-//       user_name: _name,
-//       is_chat: true,
-//     );
-//
-//     setState(() {
-//       _messages.insert(0, inputMessage);
-//     });
-//
-//     // TextField에 다시 입력 포커스
-//     _focusNode.requestFocus();
-//
-//     // 맨 아래로 스크롤
-//     _scrollController.animateTo(
-//       0.0,
-//       curve: Curves.easeOut,
-//       duration: const Duration(milliseconds: 300),
-//     );
-//
-//   }
-// }
