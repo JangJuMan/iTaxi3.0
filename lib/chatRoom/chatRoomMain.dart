@@ -1,43 +1,108 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart'; // 테마
 import 'package:flutter/cupertino.dart';  // 플랫폼별 버튼
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';          // Datetime format
-import 'package:itaxi/main.dart';
-import 'package:itaxi/themes.dart';       // 이거 임포트 경로가 다를 수 있음. 깃헙이름이 iTaxi 3.0이라서 내 로컬이랑 다를수도..
+import 'messageModel.dart';
 
 import 'package:http/http.dart' as http;  // 네트워크 통신 테스트
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'dart:async';
-import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-
-import 'messageModel.dart';
-
-// TODO: 제한된 개수로 채팅 불러오기
-// TODO: 이전 기록이 같은 사람이면 텍스트만 보이게하기
-// TODO: 이전 기록이 같은 시간이면 아래 시간만 보이게하기
 
 // Widget > Component > Element
 
 String _name = "장주만";
 
+class Participant{
+  String user_name;
+  String phone_number;
+  String user_id;
+
+  Participant(this.user_name, this.phone_number, this.user_id);
+
+  factory Participant.fromJson(dynamic json){
+    return Participant(
+      json['user_name'] as String,
+      json['phone_number'] as String,
+      json['user_id'] as String,
+    );
+  }
+}
+
+class Chat{
+  String content;
+  String date_time;
+  String user_name;
+  bool is_chat;
+  List reads;
+
+  Chat(this.content, this.date_time, this.user_name, this.is_chat, [this.reads]);
+
+  factory Chat.fromJson(dynamic json){
+    var readsJson = json['read'] as List;
+    List _read = readsJson != null ? List.from(readsJson) : null;
+
+    return Chat(
+      json['content'] as String,
+      json['date_time'] as String,
+      json['user_name'] as String,
+      json['is_chat'] as bool,
+      _read
+    );
+  }
+}
+
 // Class: 채팅방 정보
 class ChatRoomInfo {
-  // TODO: 나중엔 속성에 맞게 수정 필요
-  final int userId;
-  final int id;
-  final String title;
+  String _id;
+  String departure_date;
+  String departure_time;
+  String departure_place;
+  String arrival_place;
+  List participants;
+  int max_people;
+  int curr_people;
+  List chats;
+  bool is_paid;
 
-  ChatRoomInfo({this.userId, this.id, this.title});
 
-  factory ChatRoomInfo.fromJson(Map<String, dynamic> json) {
+
+  ChatRoomInfo(
+    this._id, this.departure_date, this.departure_time,
+    this.departure_place, this.arrival_place, this.max_people,
+    this.curr_people, this.is_paid, [this.participants, this.chats]
+  );
+
+
+  factory ChatRoomInfo.fromJson(json){
+    // DEBUG
+    print('Json 원본: ');
+    print(json);
+
+    // 참여자 정보
+    var participantJson = json['participants'] as List;
+    List _participants = participantJson.map((partiJson) => Participant.fromJson(partiJson)).toList();
+
+    // 채팅정보
+    var chatsJson = json['chats'] as List;
+    List _chats = chatsJson.map((chatJson) => Chat.fromJson(chatJson)).toList();
+
+
     return ChatRoomInfo(
-      userId: json['userId'],
-      id: json['id'],
-      title: json['title'],
+      json['_id'] as String,
+      json['departure_date'] as String,
+      json['departure_time'] as String,
+      json['departure_place'] as String,
+      json['arrival_place'] as String,
+      json['max_people'] as int,
+      json['curr_people'] as int,
+      json['is_paid'] as bool,
+      _participants,
+      _chats,
     );
   }
 }
@@ -45,7 +110,8 @@ class ChatRoomInfo {
 
 // Method: 채팅방 정보 받아오기.
 Future<ChatRoomInfo> fetchChatRoomInfo() async {
-  final response = await http.get('https://jsonplaceholder.typicode.com/albums/1');
+  // final response = await http.get('https://jsonplaceholder.typicode.com/albums');
+  final response = await http.get('http://3.16.102.171:9876/taxi/6027b4a063c216d683d7edd1');
 
   if(response.statusCode == 200){
     return ChatRoomInfo.fromJson(jsonDecode(response.body));
@@ -79,10 +145,7 @@ class _ChatScreenState extends State<ChatScreen> {
   bool _isWriting = false;
 
   // 사용자 정보 확장 변수
-  bool _isVisible01 = true;
-  bool _isVisible02 = true;
-  bool _isVisible03 = true;
-  bool _isVisible04 = true;
+  List isParticipantVisible = [true, true, true, true];
 
   // 스크롤 컨트롤러 객체
   ScrollController _scrollController = new ScrollController();
@@ -139,6 +202,7 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     futureChatRoomInfo = fetchChatRoomInfo();
 
+
     // 보여줄 메시지 개수 세팅
     if(sampleMessages.length <= 10){
       numOfMsg = sampleMessages.length;
@@ -189,9 +253,17 @@ class _ChatScreenState extends State<ChatScreen> {
   // ignore: non_constant_identifier_names
   Widget _wid_chatScreen([AsyncSnapshot<ChatRoomInfo> snapshot]) {
     // snapshot 데이터 파싱 (TODO: 나중에 수정)
-    int id = snapshot.data.id;
-    int userId = snapshot.data.userId;
-    String title = snapshot.data.title;
+    String test1 = snapshot.data.participants[0].user_name;
+    String test2 = snapshot.data.chats[0].content;
+    print(test2);
+
+    int id = 1;
+    int userId = 1;
+    String title = "title";
+
+    // int id = snapshot.data.test[0].id;
+    // int userId = snapshot.data.test[0].userId;
+    // String title = snapshot.data.test[0].title;
 
     // 이전과 같은 사람?
     String prevUserName = _name;
@@ -204,10 +276,13 @@ class _ChatScreenState extends State<ChatScreen> {
           // 채팅방 정보
           Container(
             child: _wid_roomInfo(
-              departure_place: title,
-              arrival_place: title,
-              departure_date: id.toString(),
-              depature_time: userId.toString()
+              departure_place: snapshot.data.departure_place,
+              arrival_place: snapshot.data.arrival_place,
+              departure_date: snapshot.data.departure_date,
+              departure_time: snapshot.data.departure_time,
+              max_people: snapshot.data.max_people,
+              curr_people: snapshot.data.curr_people,
+              participants: snapshot.data.participants,
             ),
           ),
 
@@ -270,12 +345,15 @@ class _ChatScreenState extends State<ChatScreen> {
 
   // Widget: 채팅방 정보
   // ignore: non_constant_identifier_names
-  Widget _wid_roomInfo({String departure_place, String arrival_place, String departure_date, String depature_time}){
+  Widget _wid_roomInfo({String departure_place, String arrival_place, String departure_date, String departure_time, int max_people, int curr_people, List participants}){
     // 기본값 설정
     departure_place ??= "";
     arrival_place ??= "";
     departure_date ??= "";
-    depature_time ??= "";
+    departure_time ??= "";
+    max_people ??= 4;
+    curr_people ??= 1;
+    participants ??= [];
 
     return Container(
       child: Column(
@@ -284,9 +362,13 @@ class _ChatScreenState extends State<ChatScreen> {
             departure_place: departure_place,
             arrival_place: arrival_place,
             departure_date: departure_date,
-            depature_time: depature_time
+            departure_time: departure_time,
+            max_people: max_people,
+            curr_people: curr_people,
           ),
-          _cmp_participantInfo(),
+          _cmp_participantInfo(
+            participants: participants,
+          ),
         ],
       ),
     );
@@ -294,7 +376,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   // Component: 방정보
   // ignore: non_constant_identifier_names
-  Container _cmp_roomInfo({String departure_place, String arrival_place, String departure_date, String depature_time}){
+  Container _cmp_roomInfo({String departure_place, String arrival_place, String departure_date, String departure_time, int max_people, int curr_people}){
     return Container(
       padding: EdgeInsets.all(1.0),
       // decoration: BoxDecoration(
@@ -311,32 +393,38 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.all(2.0),
+                  padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 5.0),
                   margin: EdgeInsets.all(2.0),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(departure_place, style: TextStyle(fontSize: 16)),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(2.0),
-                  margin: EdgeInsets.all(2.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Icon(Icons.arrow_forward),
+                      Text(departure_place+" ", style: TextStyle(fontSize: 16)),
+                      Icon(Icons.arrow_forward, size: 16,),
                       Text(" "+arrival_place, style: TextStyle(fontSize: 16)),
                     ],
                   ),
                 ),
+                // Container(
+                //   padding: EdgeInsets.all(2.0),
+                //   margin: EdgeInsets.all(2.0),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     children: [
+                //       Icon(Icons.arrow_forward),
+                //       Text(" "+arrival_place, style: TextStyle(fontSize: 16)),
+                //     ],
+                //   ),
+                // ),
                 Container(
-                  padding: EdgeInsets.all(2.0),
-                  margin: EdgeInsets.all(2.0),
+                  padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+                  margin: EdgeInsets.all(0.0),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Icon(Icons.departure_board, size: 16),
-                      Text(" "+departure_date+"  "+depature_time, style: TextStyle(fontSize: 16)),
+                      Text(departure_date+"  "+departure_time+"    ", style: TextStyle(fontSize: 16)),
+                      Icon(Icons.people, size: 16),
+                      Text('('+curr_people.toString()+' / '+max_people.toString()+')', style: TextStyle(fontSize: 16)),
                     ],
                   ),
                 ),
@@ -451,7 +539,7 @@ class _ChatScreenState extends State<ChatScreen> {
         content: Form(
           key: _ducthpayFormKey,
           child: SizedBox(
-            height: 200,
+            height: 250,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -528,7 +616,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   // Component: 참가자 리스트
   // ignore: non_constant_identifier_names
-  Container _cmp_participantInfo(){
+  Container _cmp_participantInfo({List participants}){
     return Container(
       padding: EdgeInsets.symmetric(vertical: 2.0),
       decoration: BoxDecoration(
@@ -544,12 +632,11 @@ class _ChatScreenState extends State<ChatScreen> {
         // 스크롤 방향 설정. 수평적으로 스크롤되도록 설정
         scrollDirection: Axis.horizontal,
         // 컨테이너들을 ListView의 자식들로 추가
-        children: [
-          // TODO: 반복문... 안써도 되나?
-          _elem_participantUnit('장주만', 1, _isVisible01, '01041578299'),
-          _elem_participantUnit('홍길참', 2, _isVisible02, '01012341234'),
-          _elem_participantUnit('김참길', 3, _isVisible03, '01023452345'),
-          _elem_participantUnit('고베어', 4, _isVisible04, '01034564567'),
+        children: <Widget>[
+          for(int i = 0; i < participants.length; i++)
+            _elem_participantUnit(participants[i].user_name, i, isParticipantVisible[i], participants[i].phone_number),
+
+          // _elem_participantUnit('장주만', 1, isParticipantVisible[1], '01041578299'),
         ],
       ),
     );
@@ -580,17 +667,17 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             onPressed: () {
               setState(() {
-                if(btnNumber == 1){
-                  _isVisible01 = !_isVisible01;
+                if(btnNumber == 0){
+                  isParticipantVisible[0] = !isParticipantVisible[0];
+                }
+                else if(btnNumber == 1){
+                  isParticipantVisible[1] = !isParticipantVisible[1];
                 }
                 else if(btnNumber == 2){
-                  _isVisible02 = !_isVisible02;
+                  isParticipantVisible[2] = !isParticipantVisible[2];
                 }
                 else if(btnNumber == 3){
-                  _isVisible03 = !_isVisible03;
-                }
-                else if(btnNumber == 4){
-                  _isVisible04 = !_isVisible04;
+                  isParticipantVisible[3] = !isParticipantVisible[3];
                 }
               });
             },
@@ -822,10 +909,14 @@ class _ChatScreenState extends State<ChatScreen> {
                       ],
                     ),
                     child: GestureDetector(
-                      onTap: () {
+                      onLongPress: () {
                         Clipboard.setData(ClipboardData(text: message.content));
                         Fluttertoast.showToast(msg: "클립보드에 복사되었습니다.");
                       },
+                      // onTap: () {
+                      //   Clipboard.setData(ClipboardData(text: message.content));
+                      //   Fluttertoast.showToast(msg: "클립보드에 복사되었습니다.");
+                      // },
                       child: Text(
                           message.content,
                           style: TextStyle(
