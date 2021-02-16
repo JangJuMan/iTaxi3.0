@@ -247,32 +247,34 @@ class _TimeLineState extends State<TimeLine> {
                           Expanded(
                             child:
                               Container(
-                                child:
-                                  TextButton(
-
-                                    child: Text('택시', style: TextStyle(color: taxiPressed? Colors.blueAccent : Colors.black54),),
-                                    onPressed: () {
-                                      setState(() {
-                                        taxiPressed = !taxiPressed;
-                                        carPressed = !carPressed;
-                                      });
-                                    },
-                                  ),
+                                // TODO: 난 TextButton 이 로드가 안되서 잠시 비활성화
+                                // child:
+                                //   TextButton(
+                                //
+                                //     child: Text('택시', style: TextStyle(color: taxiPressed? Colors.blueAccent : Colors.black54),),
+                                //     onPressed: () {
+                                //       setState(() {
+                                //         taxiPressed = !taxiPressed;
+                                //         carPressed = !carPressed;
+                                //       });
+                                //     },
+                                //   ),
                               ),
                           ),
                           Expanded(
                             child:
                               Container(
-                                child:
-                                TextButton(
-                                  child: Text('카풀', style: TextStyle(color: carPressed? Colors.blueAccent : Colors.black54),),
-                                  onPressed: () {
-                                    setState(() {
-                                      taxiPressed = !taxiPressed;
-                                      carPressed = !carPressed;
-                                    });
-                                  },
-                                ),
+                                // TODO: 난 TextButton 이 로드가 안되서 잠시 비활성화
+                                // child:
+                                // TextButton(
+                                //   child: Text('카풀', style: TextStyle(color: carPressed? Colors.blueAccent : Colors.black54),),
+                                //   onPressed: () {
+                                //     setState(() {
+                                //       taxiPressed = !taxiPressed;
+                                //       carPressed = !carPressed;
+                                //     });
+                                //   },
+                                // ),
                               ),
                           ),
                         ],
