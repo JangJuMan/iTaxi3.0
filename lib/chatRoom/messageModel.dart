@@ -1,3 +1,7 @@
+/*
+* 메시지 샘플
+*/
+
 class Message {
   final String user_name;
   final String content;
@@ -6,8 +10,6 @@ class Message {
   // final int unread;
 
   Message({this.user_name, this.content, this.date_time, this.is_chat});
-
-
 }
 
 
