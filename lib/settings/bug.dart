@@ -6,6 +6,7 @@ class Bug extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         title: Text ('버그 제보'),
       ),
     );

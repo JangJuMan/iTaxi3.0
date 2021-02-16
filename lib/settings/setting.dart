@@ -45,14 +45,15 @@ class _SettingsState extends State<Settings> {
       appBar: AppBar(
         centerTitle: true,
         title: Text('설정',),
+        backgroundColor: Colors.blue,
         actions: [
           // TODO: 아이콘이 로드가 안되서 그냥 보이는거 아무거나 넣었습니다.
           // IconButton(
           //   icon: Icon(Icons.logout),
           // )
-          IconButton(
-            icon: Icon(Icons.replay),
-          )
+          // IconButton(
+          //   icon: Icon(Icons.login_outlined),
+          // )
         ],
       ),
       body: _myListView(),
@@ -67,8 +68,8 @@ class _SettingsState extends State<Settings> {
           // 아이콘 내맘대로 한거임 바꿔도 됨!
           _comp_listTile(Icons.event_note, '공지사항', UpdateInfo()),
           _comp_listTile(Icons.person_pin, '내정보', MyInfo()),
-          _comp_listTile(Icons.developer_mode, '버전정보/개발자', Version()),
-          _comp_listTile(Icons.access_alarm, '알림', Alarm()),
+          _comp_listTile(Icons.new_releases/*_outlined*/, '버전정보/개발자', Version()),
+          _comp_listTile(Icons.notifications_none, '알림', Alarm()),
           _comp_listTile(Icons.bug_report, '버그제보', Bug()),
           _comp_listTile(Icons.lock, '이용약관', TermsOfService()),
         ],

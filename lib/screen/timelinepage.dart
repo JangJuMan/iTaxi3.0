@@ -86,20 +86,20 @@ Widget RideSoon() {
             left: 20,
           ),
           child: Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  '곧 탑승 예정',
-                  style: TextStyle(
-                      color: Colors.blueAccent,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold),
-                )
-              ],
-            ),
-          ),
-        ),
+  child: Row(
+  mainAxisAlignment: MainAxisAlignment.start,
+  children: <Widget>[
+  Text(
+  '곧 탑승 예정',
+  style: TextStyle(
+  color: Colors.blueAccent,
+  fontSize: 15,
+  fontWeight: FontWeight.bold),
+  )
+  ],
+  ),
+  ),
+  ),
         Container(
           margin: EdgeInsets.all(20),
           decoration: BoxDecoration(
