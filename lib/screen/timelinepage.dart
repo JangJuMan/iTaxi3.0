@@ -158,15 +158,20 @@ Widget RideSoon() {
 }
 
 Widget RideLog() {
-  var date = DateTime.now();
+  DateTime now =  DateTime.now();
+  DateTime before = now.subtract(Duration(days: 1));
+  var day = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'];
+  var when = now.weekday;
+
+
   return Container(
     child: Column(
       children: <Widget>[
         Row (
             children: <Widget>[
               Padding(padding: EdgeInsets.only(left: 15)),
-              Text('${date.month.toString()}월 ${date.day.toString()}일 ', style: TextStyle(color: Colors.black54, fontSize: 14)),
-              Text(DateFormat('EEEE').format(date).toString(), style: TextStyle(color: Colors.black54, fontSize: 14)),
+              Text('${now.month.toString()}월 ${now.day.toString()}일 ', style: TextStyle(color: Colors.black54, fontSize: 14)),
+              Text(day[when-1], style: TextStyle(color: Colors.black54, fontSize: 14)),
             ]
         ),
         listWidget(),
@@ -175,8 +180,8 @@ Widget RideLog() {
         Row (
             children: <Widget>[
               Padding(padding: EdgeInsets.only(left: 15)),
-              Text('${date.subtract(Duration(days: 1)).month.toString()}월 ${date.subtract(Duration(days: 1)).day.toString()}일 ', style: TextStyle(color: Colors.black54, fontSize: 14)),
-              Text(DateFormat('EEEE').format(date.subtract(Duration(days: 1))).toString(), style: TextStyle(color: Colors.black54, fontSize: 14)),
+              Text('${now.subtract(Duration(days: 1)).month.toString()}월 ${now.subtract(Duration(days: 1)).day.toString()}일 ', style: TextStyle(color: Colors.black54, fontSize: 14)),
+              Text(day[before.weekday-1], style: TextStyle(color: Colors.black54, fontSize: 14)),
             ]
         ),
         listWidget(),
@@ -186,6 +191,8 @@ Widget RideLog() {
   );
 }
 
+bool taxiPressed = true;
+bool carPressed = false;
 class _TimeLineState extends State<TimeLine> {
   @override
   Widget build(BuildContext context) {
@@ -220,27 +227,65 @@ class _TimeLineState extends State<TimeLine> {
                 RideSoon(),
                 Padding(
                   padding: EdgeInsets.only(
-                    top: 15,
-                    left: 20,
+                    top: 15.0,
+                    left: 20.0,
                   ),
-                  child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          '탑승 내역',
-                          style: TextStyle(
-                              color: Colors.black54,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
+
+                    child: Container(
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            '탑승 내역',
+                            style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(right: 100.0, left: 100.0),
+                          ),
+                          Expanded(
+                            child:
+                              Container(
+                                // TODO: 난 TextButton 이 로드가 안되서 잠시 비활성화
+                                // child:
+                                //   TextButton(
+                                //
+                                //     child: Text('택시', style: TextStyle(color: taxiPressed? Colors.blueAccent : Colors.black54),),
+                                //     onPressed: () {
+                                //       setState(() {
+                                //         taxiPressed = !taxiPressed;
+                                //         carPressed = !carPressed;
+                                //       });
+                                //     },
+                                //   ),
+                              ),
+                          ),
+                          Expanded(
+                            child:
+                              Container(
+                                // TODO: 난 TextButton 이 로드가 안되서 잠시 비활성화
+                                // child:
+                                // TextButton(
+                                //   child: Text('카풀', style: TextStyle(color: carPressed? Colors.blueAccent : Colors.black54),),
+                                //   onPressed: () {
+                                //     setState(() {
+                                //       taxiPressed = !taxiPressed;
+                                //       carPressed = !carPressed;
+                                //     });
+                                //   },
+                                // ),
+                              ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+
+
                 ),
                 Divider(
                   color: Colors.black26,
-                  height: 20,
+                  height: 15.0,
                 ),
 
                 RideLog(),
