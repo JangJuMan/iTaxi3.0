@@ -45,6 +45,7 @@ class _SettingsState extends State<Settings> {
       appBar: AppBar(
         centerTitle: true,
         title: Text('설정',),
+        backgroundColor: Colors.blue,
         actions: [
           // TODO: 아이콘이 로드가 안되서 그냥 보이는거 아무거나 넣었습니다.
           // IconButton(

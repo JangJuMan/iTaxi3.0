@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'remyInfo.dart';
 
 class MyInfo extends StatelessWidget {
   @override
@@ -6,21 +7,42 @@ class MyInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         title: Text ('내정보'),
       ),
       body:
           Column(
             children: <Widget> [
             _Profile(),
-            _EditButton(),
+             Container(
+               child: Container(
+                child: Row(
+                  children: <Widget> [
+                    Padding(
+                      padding: EdgeInsets.only(top:100, left: 150),
+                    ),
+                    RaisedButton(
+                      child: Text('개인정보 수정'),
+                      onPressed: () => {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => RemyInfo(),
+                          )
+                        )
+                      },
+                    )
+                  ],
+                )
+               )
+             )
             ]
-          )
-      );
+             )
+          );
   }
 }
 
-
-Widget _Profile() {
+ Widget _Profile() {
   return Container(
     child : Container(
       child: Row(
@@ -79,20 +101,3 @@ Widget _Info(text){
   );
 }
 
-Widget _EditButton(){
-  return Container(
-    child: Container(
-      child: Row(
-        children: <Widget> [
-          Padding(
-            padding: EdgeInsets.only(top:100, left: 150),
-          ),
-        RaisedButton(
-          onPressed: () {},
-          child: Text("개인정보 수정"),
-          )
-        ],
-      )
-    )
-  );
-}
