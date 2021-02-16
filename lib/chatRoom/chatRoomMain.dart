@@ -230,7 +230,6 @@ class _ChatScreenState extends State<ChatScreen> {
         numOfMsg += 10;
       }
       else{
-        print('Rmx');
         numOfMsg = sampleMessages.length;
         // 메시지를 끝까지 다 올리면 새로고침이 더 안되도록 함.
         isEnablePullUp = false;

@@ -98,13 +98,12 @@ class _PlusPageState extends State<PlusPage> {
                         )
                       ]
                   ),
-                  // TODO: merge를 위해 잠시 지움
-                  // TextButton(
-                  //   child: Text('확인'),
-                  //   onPressed: () {
-                  //     Navigator.pop(context);
-                  //   },
-                  // )
+                  TextButton(
+                    child: Text('확인'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  )
                 ]
             )
         )

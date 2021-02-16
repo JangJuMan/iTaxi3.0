@@ -40,8 +40,6 @@ class MyApp extends StatelessWidget{
         'SignUp': (context) => SignUp(),
         'MainScreen': (context) => MainScreen(),
         'ChatScreen': (context) => ChatScreen(),
-        //이거 넣어줘야 하나......??? @주만오빠
-        // 주만: 네비게이션으로 이동할거 아니라서 상관 없어보이넹.
         'RideLog' : (context) => TimeLine(),
       },
       home: SignIn(),
