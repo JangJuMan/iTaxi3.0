@@ -7,7 +7,7 @@ class MyInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
         title: Text ('내정보'),
       ),
       body:

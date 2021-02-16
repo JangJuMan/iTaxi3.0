@@ -6,7 +6,7 @@ class Version extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
         title: Text ('버전정보'),
       ),
       body: Container(

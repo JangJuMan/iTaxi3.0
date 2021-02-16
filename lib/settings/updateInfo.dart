@@ -8,7 +8,7 @@ class UpdateInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.white,
         title: Text ('공지사항'),
       ),
       body: ListView(

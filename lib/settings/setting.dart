@@ -43,9 +43,13 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        // TODO: 지금은 일일히 다 하얀색을 지정해줬는데, 나~중에는 테마 색을 설정해서 하나의 테마색으로 전체가 적용되게 하면 좋을듯.
+        backgroundColor: Colors.white,
+        brightness: Brightness.light,
+        // elevation: 0.0,
         centerTitle: true,
         title: Text('설정',),
-        backgroundColor: Colors.blue,
+        // backgroundColor: Colors.blue,
         actions: [
           // IconButton(
           //   icon: Icon(Icons.logout),
