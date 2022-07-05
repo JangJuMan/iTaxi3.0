@@ -198,7 +198,7 @@ class _TimeLineState extends State<TimeLine> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset : false,
         appBar: AppBar(
           backgroundColor: Colors.white,
           title: const Text(

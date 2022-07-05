@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:itaxi/screen/listpage.dart';
 import 'package:itaxi/screen/timelinepage.dart';
 import 'package:itaxi/settings/setting.dart';
@@ -34,11 +34,11 @@ class _MainScreenState extends State<MainScreen> {
           builder: (context) => AlertDialog(
             title: Text("정말 종료하시겠습니까?"),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 child: Text("아니오"),
                 onPressed: ()=>Navigator.pop(context, false),
               ),
-              FlatButton(
+              TextButton(
                 child: Text("예"),
                 onPressed: ()=>{
                   // 앱 종료
@@ -56,7 +56,7 @@ class _MainScreenState extends State<MainScreen> {
       final isFirstRouteInCurrentTab = _navigatorKeys[_selectedIndex].currentState.maybePop();
 
       if (backPressCounter < 1) {
-        Fluttertoast.showToast(msg: "한번 더 누르면 종료됩니다.");
+        // Fluttertoast.showToast(msg: "한번 더 누르면 종료됩니다.");
         backPressCounter++;
         Future.delayed(Duration(seconds: 1, milliseconds: 500), () {
           backPressCounter--;

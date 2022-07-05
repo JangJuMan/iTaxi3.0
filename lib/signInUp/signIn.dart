@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:itaxi/customPageRoutes.dart';
 import 'package:itaxi/mainScreen.dart';
 import 'package:itaxi/screen/listpage.dart';
@@ -27,200 +29,206 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      // resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: GestureDetector(
             onTap: () {
               FocusScope.of(context).requestFocus(_blankFocusnode);
             },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Row(
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Center(
-                      child: Container(
-                        width: 120,
-                        height: 120,
-                        margin: EdgeInsets.only(right: 10),
-                        // child: Text("Logo"),
-                        child: Image.asset('assets/images/logo_main.png')
-                      )
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          "iTaxi",
-                          style: TextStyle(
-                            color: Colors.blue,
-                            fontSize: 70,
-                          )
-                        ),
-                        Text(
-                          "Powered by CRA",
-                          style: TextStyle(
-                            color: Colors.blue,
-                            fontSize: 18,
-                          )
-                        ),
-                      ]
-                    )
-                  ],
-                ),
-                Form(
-                  key: _formKey,
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        TextFormField(
-                          decoration: InputDecoration(
-                              hintText: "Your custom ID",
-                              labelText: "Custom ID",
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue),
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Center(
+                              child: Container(
+                                  width: 120,
+                                  height: 120,
+                                  margin: EdgeInsets.only(right: 10),
+                                  // child: Text("Logo"),
+                                  child: Image.asset('assets/images/logo_main.png')
                               )
                           ),
-                          validator: (value) {
-                            return value.isEmpty ? "Enter your hisnet ID" : null;
-                          },
-                        ),
-                        TextFormField(
-                            obscureText: !passwordVisiable,
-                            decoration: InputDecoration(
-                                hintText: "Your custom PW",
-                                labelText: "Custom PW",
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.blue),
-                                ),
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    passwordVisiable ? Icons.visibility : Icons.visibility_off,
-                                    color: passwordVisiable ? Colors.blue : Colors.grey,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      passwordVisiable = !passwordVisiable;
-                                    });
-                                  },
-                                )
-                            ),
-                            validator: (value) {
-                              return value.isEmpty ? "Enter your hisnet PW" : null;
-                            }
-                        ),
-                        /*
-                        IconButton(
-                          icon: !isBtnPressed ? Image.asset('assets/images/btn_google_login.png') : Image.asset('assets/images/btn_google_login_pressed.png'),
-                          onPressed: () {
-                            setState((){isBtnPressed = !isBtnPressed;});
-                          },
-                        )
-                        */
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
+                          Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
                                 Text(
-                                  'Remember ID',
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                                Checkbox(
-                                  value: idRemember,
-                                  activeColor: Colors.blue,
-                                  onChanged: (bool value) {
-                                    setState(() {
-                                      idRemember = value;
-                                    });
-                                  }
-                                )
-                              ]
-                            ),
-                            RawMaterialButton(
-                              child: Text(
-                                'Find PW',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
-                              onPressed: () {
-                                // Navigate
-                              },
-                            )
-                          ]
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Column(
-                          children: <Widget> [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget> [
-                                ButtonTheme(
-                                  minWidth: 200,
-                                  height: 50,
-                                  child: RaisedButton(
-                                    color: Colors.blue,
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                      side: BorderSide(
-                                        color: Colors.blue,
-                                      )
-                                    ),
-                                    onPressed: () {
-                                      FocusScope.of(context).requestFocus(new FocusNode());
-                                      if(_loginCheck()){
-                                        // Navigator.push(context, MaterialPageRoute(builder: (context) => TaxiCarList()));
-                                        // Navigator.push(context, BouncyPageRoute(widget: TaxiCarList()),);
-                                        // Navigator.of(context).push(FadeInOutPageRoute(TaxiCarList()));
-
-
-                                        Navigator.of(context).push(FadeInOutPageRoute(MainScreen()));
-
-                                        // 스택에서 가장 처음인 signIn 을 빼고 MainScreen으로 이동하겠다.
-                                        // Navigator.of(context).pushNamedAndRemoveUntil('MainScreen', (Route<dynamic> route) => false);
-                                      }
-                                      // _signIn();
-                                    },
-                                    child: Text(
-                                      'Sign In',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.white,
-                                      )
+                                    "iTaxi",
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontSize: 70,
                                     )
-                                  )
-                                )
+                                ),
+                                Text(
+                                    "Powered by CRA",
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontSize: 18,
+                                    )
+                                ),
                               ]
-                            ),
-                            RawMaterialButton(
-                              onPressed: () {
-                                // Navigate
-                                // Navigator.pushNamed(context, 'SignUp');
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
-                              },
-                              child: Text(
-                                'Sign Up',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.black54,
-                                  decoration: TextDecoration.underline,
-                                )
+                          )
+                        ],
+                      ),
+                      Form(
+                          key: _formKey,
+                          child: Container(
+                              padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    TextFormField(
+                                      decoration: InputDecoration(
+                                          hintText: "Your custom ID",
+                                          labelText: "Custom ID",
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(color: Colors.blue),
+                                          )
+                                      ),
+                                      validator: (value) {
+                                        return value.isEmpty ? "Enter your hisnet ID" : null;
+                                      },
+                                    ),
+                                    TextFormField(
+                                        obscureText: !passwordVisiable,
+                                        decoration: InputDecoration(
+                                            hintText: "Your custom PW",
+                                            labelText: "Custom PW",
+                                            focusedBorder: UnderlineInputBorder(
+                                              borderSide: BorderSide(color: Colors.blue),
+                                            ),
+                                            suffixIcon: IconButton(
+                                              icon: Icon(
+                                                passwordVisiable ? Icons.visibility : Icons.visibility_off,
+                                                color: passwordVisiable ? Colors.blue : Colors.grey,
+                                              ),
+                                              onPressed: () {
+                                                setState(() {
+                                                  passwordVisiable = !passwordVisiable;
+                                                });
+                                              },
+                                            )
+                                        ),
+                                        validator: (value) {
+                                          return value.isEmpty ? "Enter your hisnet PW" : null;
+                                        }
+                                    ),
+                                    /*
+                          IconButton(
+                            icon: !isBtnPressed ? Image.asset('assets/images/btn_google_login.png') : Image.asset('assets/images/btn_google_login_pressed.png'),
+                            onPressed: () {
+                              setState((){isBtnPressed = !isBtnPressed;});
+                            },
+                          )
+                          */
+                                    Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                              children: [
+                                                Text(
+                                                  'Remember ID',
+                                                  style: TextStyle(fontSize: 15),
+                                                ),
+                                                Checkbox(
+                                                    value: idRemember,
+                                                    activeColor: Colors.blue,
+                                                    onChanged: (bool value) {
+                                                      setState(() {
+                                                        idRemember = value;
+                                                      });
+                                                    }
+                                                )
+                                              ]
+                                          ),
+                                          RawMaterialButton(
+                                            child: Text(
+                                              'Find PW',
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                                decoration: TextDecoration.underline,
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              // Navigate
+                                            },
+                                          )
+                                        ]
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Column(
+                                        children: <Widget> [
+                                          Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: <Widget> [
+                                                ButtonTheme(
+                                                    minWidth: 200,
+                                                    height: 50,
+                                                    child: RaisedButton(
+                                                        color: Colors.blue,
+                                                        elevation: 0,
+                                                        shape: RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.circular(30),
+                                                            side: BorderSide(
+                                                              color: Colors.blue,
+                                                            )
+                                                        ),
+                                                        onPressed: () {
+                                                          FocusScope.of(context).requestFocus(new FocusNode());
+                                                          if(_loginCheck()){
+                                                            // Navigator.push(context, MaterialPageRoute(builder: (context) => TaxiCarList()));
+                                                            // Navigator.push(context, BouncyPageRoute(widget: TaxiCarList()),);
+                                                            // Navigator.of(context).push(FadeInOutPageRoute(TaxiCarList()));
+
+
+                                                            // Navigator.of(context).push(FadeInOutPageRoute(MainScreen()));
+                                                            Get.to(MainScreen());
+                                                            // 스택에서 가장 처음인 signIn 을 빼고 MainScreen으로 이동하겠다.
+                                                            // Navigator.of(context).pushNamedAndRemoveUntil('MainScreen', (Route<dynamic> route) => false);
+                                                          }
+                                                          // _signIn();
+                                                        },
+                                                        child: Text(
+                                                            'Sign In',
+                                                            style: TextStyle(
+                                                              fontSize: 20,
+                                                              color: Colors.white,
+                                                            )
+                                                        )
+                                                    )
+                                                )
+                                              ]
+                                          ),
+                                          RawMaterialButton(
+                                              onPressed: () {
+                                                // Navigate
+                                                // Navigator.pushNamed(context, 'SignUp');
+                                                // Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
+                                                Get.to(SignUp());
+                                              },
+                                              child: Text(
+                                                  'Sign Up',
+                                                  style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.black54,
+                                                    decoration: TextDecoration.underline,
+                                                  )
+                                              )
+                                          )
+                                        ]
+                                    )
+                                  ]
                               )
-                            )
-                          ]
-                        )
-                      ]
-                    )
-                  )
-                )
-              ]
+                          )
+                      )
+                    ]
+                ),
+              ),
             )
         )
       )

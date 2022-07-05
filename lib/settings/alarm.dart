@@ -7,8 +7,11 @@ class Alarm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+            color: Colors.black
+        ),
         backgroundColor: Colors.white,
-        title: Text ('알림'),
+        title: Text ('알림', style: TextStyle(color: Colors.black),),
       ),
     );
   }

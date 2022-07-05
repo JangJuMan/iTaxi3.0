@@ -6,8 +6,11 @@ class TermsOfService extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+            color: Colors.black
+        ),
         backgroundColor: Colors.white,
-        title: Text ('이용약관'),
+        title: Text ('이용약관', style: TextStyle(color: Colors.black), ),
       ),
     );
   }

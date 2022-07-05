@@ -9,22 +9,6 @@ import 'updateInfo.dart';
 import 'version.dart';
 import 'logout.dart';
 
-// 세팅 페이지 이름좀 바꿨습니다. (MyHomePage --> Settings)
-// class SettingPage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: '',
-//       theme: ThemeData(
-//         primaryColor: Colors.white,
-//       ),
-//       home: Settings(
-//         title: '설정',
-//       ),
-//     );
-//   }
-// }
-
 class Settings extends StatefulWidget {
   final Function onNext;
 
@@ -47,8 +31,8 @@ class _SettingsState extends State<Settings> {
         backgroundColor: Colors.white,
         brightness: Brightness.light,
         // elevation: 0.0,
-        centerTitle: true,
-        title: Text('설정',),
+        // centerTitle: true,
+        title: Text('설정', style: TextStyle(color: Colors.black),),
         // backgroundColor: Colors.blue,
         actions: [
           // IconButton(
@@ -56,6 +40,9 @@ class _SettingsState extends State<Settings> {
           // )
           IconButton(
             icon: Icon(Icons.login_outlined),
+            onPressed: () {
+
+            },
           )
         ],
       ),

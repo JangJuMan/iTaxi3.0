@@ -40,14 +40,16 @@ dependencies:
   table_calendar: ^2.0.1
   flutter_svg: ^0.18.1
 
-  # 플러터 토스트
-  fluttertoast: ^4.0.1
+#  # 플러터 토스트
+#  fluttertoast: ^8.0.8
 
   # 전화 및 문자 보내기 바로가기
   url_launcher: ^5.4.0
 
   # pull to refresh (당겨서 새로고침)
-  pull_to_refresh: ^1.6.3
+  pull_to_refresh: ^1.6.4-nullsafety.0
+
+  get: ^4.6.1
 
 
 

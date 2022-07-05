@@ -329,7 +329,7 @@ class _TaxiListState extends State<TaxiList> {
             // 주만: tap 효과를 위해.
             onTap: () {
               // 하단 네비게이터 유지 x
-              onNext(ChatScreen());
+              // onNext(ChatScreen());
 
               // 하단 네비게이터 유지 o
               // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
@@ -490,7 +490,7 @@ class _CarListState extends State<CarList> {
             // 주만: tap 효과를 위해.
             onTap: () {
               // 하단 네비게이터 유지 x
-              onNext(ChatScreen());
+              // onNext(ChatScreen());
 
               // 하단 네비게이터 유지 o
               // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));

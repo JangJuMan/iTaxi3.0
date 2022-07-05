@@ -6,8 +6,11 @@ class Bug extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+            color: Colors.black
+        ),
         backgroundColor: Colors.white,
-        title: Text ('버그 제보'),
+        title: Text ('버그 제보', style: TextStyle(color: Colors.black),),
       ),
     );
   }

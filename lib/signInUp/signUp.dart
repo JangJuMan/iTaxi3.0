@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -28,7 +29,7 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: true,
+      resizeToAvoidBottomInset : false,
       key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -39,7 +40,8 @@ class _SignUpState extends State<SignUp> {
           ),
           onTap: () {
             // Navigate
-            Navigator.pop(context);
+            // Navigator.pop(context);
+            Get.back();
           },
         ),
         centerTitle: true,
