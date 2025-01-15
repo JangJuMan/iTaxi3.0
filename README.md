@@ -1,20 +1,15 @@
-# itaxi
-
-A new Flutter application.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-[Google Drive](https://drive.google.com/drive/u/0/folders/1U0HIRXLNh3wh4H-O5qXhTEVs4ip8cN-2)
-  
-  
+## 프로젝트 소개
+### 개요
+택시 합승 애플리케이션
+### 개발기간
+2020.01 - 2020.02
+### 멤버구성
+송민석, 장주만, 신영현, 최진아, 강희영
+### 대상 플랫폼
+Android / iOS
+### 개발환경
+* Framework : Flutter
+* Language : Dart
+* Database : mongoDB
+## Demo
+자료 소실..ㅠ
